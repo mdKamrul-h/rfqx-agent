@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+.next/
+
+# Environment (NEVER commit)
+.env
+.env.local
+.env.production
+app/.env
+app/.env.local
+app/.env.production
+
+# Secrets
+*.pem
+*.key
+*.cert
+*.p12
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build
+dist/
+build/
+.turbo/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Task files (factory internal)
+TASK.md
