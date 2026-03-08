@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RFQX — RFQ Inbox</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-base: #0C1420;
+  --bg-card: #131E30;
+  --bg-elevated: #1A2640;
+  --bg-hover: #1F2E48;
+  --bg-input: #0F1925;
+  --border: #243049;
+  --border-light: #1C2A3F;
+  --text-primary: #E8EDF4;
+  --text-secondary: #8899B0;
+  --text-muted: #5A6E85;
+  --aqua: #57ACAF;
+  --aqua-dim: #3D8A8D;
+  --aqua-glow: rgba(87, 172, 175, 0.15);
+  --aqua-glow-strong: rgba(87, 172, 175, 0.3);
+  --yellow: #EAB308;
+  --yellow-dim: rgba(234, 179, 8, 0.15);
+  --green: #22C55E;
+  --green-dim: rgba(34, 197, 94, 0.12);
+  --red: #EF4444;
+  --red-dim: rgba(239, 68, 68, 0.12);
+  --orange: #F97316;
+  --orange-dim: rgba(249, 115, 22, 0.12);
+  --purple: #A855F7;
+  --purple-dim: rgba(168, 85, 247, 0.12);
+  --blue: #3B82F6;
+  --blue-dim: rgba(59, 130, 246, 0.12);
+  --amber: #F59E0B;
+  --amber-dim: rgba(245, 158, 11, 0.12);
+  --sidebar-w: 250px;
+  --sidebar-collapsed-w: 64px;
+  --topbar-h: 56px;
+  --quinn-w: 380px;
+  --radius: 8px;
+  --radius-sm: 6px;
+  --radius-lg: 12px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+  --transition: 200ms ease;
+  --font-head: 'Sora', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+html { font-size: 14px; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  height: 100vh;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: width var(--transition), min-width var(--transition);
+  position: relative;
+}
+.sidebar-logo {
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+  height: var(--topbar-h);
+}
+.sidebar-logo .logo-icon {
+  width: 32px; height: 32px;
+  background: linear-gradient(135deg, var(--aqua), #3D8A8D);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-head); font-weight: 800; font-size: 14px; color: #fff;
+  flex-shrink: 0;
+}
+.sidebar-logo .logo-text {
+  font-family: var(--font-head); font-weight: 800; font-size: 18px; color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+.sidebar-logo .logo-text span { color: var(--yellow); }
+
+.sidebar-nav { flex: 1; padding: 12px 8px; overflow-y: auto; }
+.sidebar-nav .nav-section-label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--text-muted); padding: 12px 12px 6px; margin-top: 4px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px; border-radius: var(--radius-sm);
+  color: var(--text-secondary); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all var(--transition); text-decoration: none;
+  position: relative; margin-bottom: 2px;
+}
+.nav-item:hover { background: var(--bg-hover); color: var(--text-primary); }
+.nav-item.active {
+  background: var(--aqua-glow);
+  color: var(--aqua);
+  font-weight: 600;
+}
+.nav-item.active::before {
+  content: ''; position: absolute; left: 0; top: 6px; bottom: 6px;
+  width: 3px; background: var(--aqua); border-radius: 0 3px 3px 0;
+}
+.nav-item svg { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.7; }
+.nav-item.active svg { opacity: 1; }
+.nav-badge {
+  margin-left: auto; font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  background: var(--aqua-glow); color: var(--aqua); padding: 1px 7px;
+  border-radius: 10px; min-width: 22px; text-align: center;
+}
+
+.sidebar-footer {
+  padding: 12px; border-top: 1px solid var(--border);
+}
+.sidebar-user {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px; border-radius: var(--radius-sm);
+  cursor: pointer; transition: background var(--transition);
+}
+.sidebar-user:hover { background: var(--bg-hover); }
+.user-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--aqua), var(--purple));
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 12px; color: #fff; flex-shrink: 0;
+}
+.user-info { line-height: 1.3; }
+.user-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.user-role { font-size: 11px; color: var(--text-muted); }
+
+/* ===== MAIN ===== */
+.main-wrapper {
+  flex: 1; display: flex; flex-direction: column; overflow: hidden;
+  min-width: 0;
+}
+
+/* ===== TOPBAR ===== */
+.topbar {
+  height: var(--topbar-h);
+  background: rgba(19, 30, 48, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 24px; gap: 16px;
+  z-index: 90;
+}
+.topbar-breadcrumb {
+  display: flex; align-items: center; gap: 6px; font-size: 13px;
+}
+.topbar-breadcrumb a {
+  color: var(--text-muted); text-decoration: none; transition: color var(--transition);
+}
+.topbar-breadcrumb a:hover { color: var(--aqua); }
+.topbar-breadcrumb .sep { color: var(--text-muted); font-size: 11px; }
+.topbar-breadcrumb .current { color: var(--text-primary); font-weight: 600; }
+
+.topbar-search {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 8px;
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 6px 12px;
+  cursor: pointer; transition: border-color var(--transition);
+  min-width: 200px;
+}
+.topbar-search:hover { border-color: var(--aqua-dim); }
+.topbar-search svg { width: 14px; height: 14px; color: var(--text-muted); }
+.topbar-search span { font-size: 12px; color: var(--text-muted); }
+.topbar-search kbd {
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: 3px; padding: 1px 5px; margin-left: auto;
+}
+
+.topbar-actions { display: flex; align-items: center; gap: 4px; }
+.topbar-btn {
+  width: 36px; height: 36px; border-radius: var(--radius-sm);
+  background: transparent; border: none; color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all var(--transition); position: relative;
+}
+.topbar-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.topbar-btn svg { width: 18px; height: 18px; }
+.notif-dot {
+  position: absolute; top: 6px; right: 6px; width: 8px; height: 8px;
+  background: var(--red); border-radius: 50%; border: 2px solid var(--bg-card);
+}
+.quinn-toggle-btn {
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  color: #fff; font-family: var(--font-head); font-weight: 700;
+  font-size: 11px; padding: 6px 14px; border-radius: var(--radius-sm);
+  border: none; cursor: pointer; transition: all var(--transition);
+  letter-spacing: 0.5px;
+}
+.quinn-toggle-btn:hover { box-shadow: 0 0 16px var(--aqua-glow-strong); transform: translateY(-1px); }
+
+/* ===== CONTENT ===== */
+.content {
+  flex: 1; display: flex; overflow: hidden;
+}
+.content-main {
+  flex: 1; overflow-y: auto; padding: 24px;
+  min-width: 0;
+}
+
+/* Page Header */
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
+}
+.page-title {
+  font-family: var(--font-head); font-size: 22px; font-weight: 800;
+  color: var(--text-primary); letter-spacing: -0.3px;
+}
+.page-subtitle {
+  font-size: 13px; color: var(--text-muted); margin-top: 2px;
+}
+.page-actions { display: flex; gap: 8px; align-items: center; }
+.view-toggle {
+  display: flex; background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); overflow: hidden;
+}
+.view-toggle-btn {
+  padding: 6px 14px; font-size: 12px; font-weight: 500;
+  background: transparent; border: none; color: var(--text-muted);
+  cursor: pointer; transition: all var(--transition);
+  display: flex; align-items: center; gap: 5px;
+}
+.view-toggle-btn.active {
+  background: var(--aqua-glow); color: var(--aqua); font-weight: 600;
+}
+.view-toggle-btn:hover:not(.active) { color: var(--text-primary); }
+.view-toggle-btn svg { width: 14px; height: 14px; }
+
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 18px; font-size: 13px; font-weight: 600;
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  color: #fff; border: none; border-radius: var(--radius-sm);
+  cursor: pointer; transition: all var(--transition);
+  font-family: var(--font-body);
+}
+.btn-primary:hover { box-shadow: 0 0 20px var(--aqua-glow-strong); transform: translateY(-1px); }
+.btn-primary svg { width: 16px; height: 16px; }
+
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 16px; font-size: 13px; font-weight: 500;
+  background: var(--bg-elevated); color: var(--text-secondary);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; transition: all var(--transition);
+  font-family: var(--font-body);
+}
+.btn-secondary:hover { border-color: var(--aqua-dim); color: var(--text-primary); }
+
+/* Filter Bar */
+.filter-bar {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 14px 18px;
+  display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+.filter-select, .filter-input {
+  font-family: var(--font-body); font-size: 12px;
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text-secondary);
+  padding: 7px 12px; transition: border-color var(--transition);
+  outline: none; min-width: 0;
+  -webkit-appearance: none;
+}
+.filter-select { padding-right: 28px; cursor: pointer; position: relative; }
+.filter-select:hover, .filter-input:hover { border-color: var(--aqua-dim); }
+.filter-select:focus, .filter-input:focus { border-color: var(--aqua); box-shadow: 0 0 0 2px var(--aqua-glow); }
+
+.filter-search {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 0 12px;
+  transition: border-color var(--transition);
+  flex: 1; min-width: 180px;
+}
+.filter-search:focus-within { border-color: var(--aqua); box-shadow: 0 0 0 2px var(--aqua-glow); }
+.filter-search svg { width: 14px; height: 14px; color: var(--text-muted); flex-shrink: 0; }
+.filter-search input {
+  background: none; border: none; color: var(--text-primary);
+  font-size: 12px; font-family: var(--font-body); padding: 7px 0;
+  outline: none; width: 100%;
+}
+.filter-search input::placeholder { color: var(--text-muted); }
+
+.filter-divider {
+  width: 1px; height: 24px; background: var(--border); margin: 0 4px;
+}
+
+/* Bulk Actions */
+.bulk-bar {
+  background: var(--aqua-glow); border: 1px solid rgba(87,172,175,0.25);
+  border-radius: var(--radius); padding: 10px 18px;
+  display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+  font-size: 13px;
+}
+.bulk-bar .bulk-count { font-weight: 600; color: var(--aqua); font-family: var(--font-mono); }
+.bulk-bar .bulk-actions { display: flex; gap: 6px; margin-left: auto; }
+.bulk-btn {
+  padding: 5px 12px; font-size: 12px; font-weight: 500;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text-secondary);
+  cursor: pointer; transition: all var(--transition); font-family: var(--font-body);
+}
+.bulk-btn:hover { border-color: var(--aqua-dim); color: var(--text-primary); }
+
+/* Table */
+.table-container {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+table {
+  width: 100%; border-collapse: collapse;
+}
+thead th {
+  text-align: left; padding: 12px 14px; font-size: 11px;
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--text-muted); background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border); white-space: nowrap;
+  cursor: pointer; user-select: none; transition: color var(--transition);
+}
+thead th:hover { color: var(--text-primary); }
+thead th .sort-icon { display: inline-block; margin-left: 4px; opacity: 0.4; font-size: 9px; }
+thead th.sorted .sort-icon { opacity: 1; color: var(--aqua); }
+tbody tr {
+  border-bottom: 1px solid var(--border-light);
+  transition: background var(--transition);
+  cursor: pointer;
+}
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--bg-hover); }
+td {
+  padding: 12px 14px; font-size: 13px; color: var(--text-primary);
+  white-space: nowrap; vertical-align: middle;
+}
+
+/* Checkbox */
+.checkbox {
+  width: 16px; height: 16px; border: 1.5px solid var(--border);
+  border-radius: 3px; background: var(--bg-input);
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition); flex-shrink: 0;
+}
+.checkbox:hover { border-color: var(--aqua); }
+.checkbox.checked {
+  background: var(--aqua); border-color: var(--aqua);
+}
+.checkbox.checked::after {
+  content: '✓'; color: #fff; font-size: 10px; font-weight: 700;
+}
+
+/* RFQ Number */
+.rfq-num {
+  font-family: var(--font-mono); font-weight: 600; font-size: 12px;
+  color: var(--aqua);
+}
+
+/* Buyer cell */
+.buyer-cell { display: flex; align-items: center; gap: 8px; }
+.buyer-logo {
+  width: 28px; height: 28px; border-radius: var(--radius-sm);
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--text-muted); flex-shrink: 0;
+}
+.buyer-name { font-weight: 600; font-size: 13px; }
+.buyer-tier { font-size: 10px; color: var(--yellow); }
+
+/* Quantity */
+.qty { font-family: var(--font-mono); font-weight: 500; font-size: 12px; }
+
+/* Priority Badge */
+.priority-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  padding: 2px 8px; border-radius: 10px;
+}
+.priority-1 { background: var(--red-dim); color: var(--red); }
+.priority-2 { background: var(--orange-dim); color: var(--orange); }
+.priority-3 { background: var(--yellow-dim); color: var(--yellow); }
+.priority-4 { background: var(--blue-dim); color: var(--blue); }
+.priority-5 { background: rgba(100,116,139,0.12); color: #64748B; }
+
+.priority-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.priority-1 .priority-dot { background: var(--red); }
+.priority-2 .priority-dot { background: var(--orange); }
+.priority-3 .priority-dot { background: var(--yellow); }
+.priority-4 .priority-dot { background: var(--blue); }
+.priority-5 .priority-dot { background: #64748B; }
+
+/* Status Badge */
+.status-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  padding: 3px 10px; border-radius: 10px; white-space: nowrap;
+}
+.status-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.status-new { background: var(--blue-dim); color: var(--blue); }
+.status-new .status-dot { background: var(--blue); }
+.status-extracting { background: var(--purple-dim); color: var(--purple); }
+.status-extracting .status-dot { background: var(--purple); }
+.status-costing { background: var(--amber-dim); color: var(--amber); }
+.status-costing .status-dot { background: var(--amber); }
+.status-review { background: var(--yellow-dim); color: var(--yellow); }
+.status-review .status-dot { background: var(--yellow); }
+.status-sent { background: rgba(87,172,175,0.12); color: var(--aqua); }
+.status-sent .status-dot { background: var(--aqua); }
+.status-followed { background: rgba(139,92,246,0.12); color: #8B5CF6; }
+.status-followed .status-dot { background: #8B5CF6; }
+.status-won { background: var(--green-dim); color: var(--green); }
+.status-won .status-dot { background: var(--green); }
+.status-lost { background: var(--red-dim); color: var(--red); }
+.status-lost .status-dot { background: var(--red); }
+
+/* Source Icons */
+.source-icon {
+  width: 26px; height: 26px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+}
+.source-email { background: var(--blue-dim); color: var(--blue); }
+.source-portal { background: var(--purple-dim); color: var(--purple); }
+.source-whatsapp { background: var(--green-dim); color: var(--green); }
+.source-upload { background: var(--amber-dim); color: var(--amber); }
+
+/* Deadline */
+.deadline { font-family: var(--font-mono); font-size: 12px; font-weight: 500; }
+.deadline-ok { color: var(--green); }
+.deadline-warn { color: var(--amber); }
+.deadline-urgent { color: var(--red); }
+
+/* Assigned avatar */
+.assigned-avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: #fff;
+}
+
+/* Timestamp */
+.timestamp { font-family: var(--font-mono); font-size: 11px; color: var(--text-muted); }
+
+/* Table footer / pagination */
+.table-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px; background: var(--bg-elevated);
+  border-top: 1px solid var(--border); font-size: 12px;
+}
+.table-footer .showing { color: var(--text-muted); font-family: var(--font-mono); font-size: 11px; }
+.pagination { display: flex; gap: 4px; }
+.page-btn {
+  width: 30px; height: 30px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 500; font-family: var(--font-mono);
+  background: transparent; border: 1px solid var(--border);
+  color: var(--text-secondary); cursor: pointer;
+  transition: all var(--transition);
+}
+.page-btn:hover { border-color: var(--aqua-dim); color: var(--text-primary); }
+.page-btn.active { background: var(--aqua); border-color: var(--aqua); color: #fff; }
+.page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+/* ===== QUINN PANEL ===== */
+.quinn-panel {
+  width: var(--quinn-w);
+  min-width: var(--quinn-w);
+  background: var(--bg-card);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  height: calc(100vh - var(--topbar-h));
+}
+.quinn-header {
+  padding: 14px 18px; display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.quinn-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--aqua), #3D8A8D);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-head); font-weight: 800; font-size: 10px; color: #fff;
+}
+.quinn-label { font-family: var(--font-head); font-weight: 700; font-size: 14px; color: var(--text-primary); }
+.quinn-status { font-size: 11px; color: var(--green); display: flex; align-items: center; gap: 4px; }
+.quinn-status::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+.quinn-header-actions { margin-left: auto; display: flex; gap: 4px; }
+.quinn-header-btn {
+  width: 28px; height: 28px; border-radius: var(--radius-sm);
+  background: transparent; border: none; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all var(--transition);
+}
+.quinn-header-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+.quinn-header-btn svg { width: 14px; height: 14px; }
+
+.quinn-messages {
+  flex: 1; overflow-y: auto; padding: 16px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.quinn-msg {
+  max-width: 90%; padding: 10px 14px; border-radius: var(--radius-lg);
+  font-size: 13px; line-height: 1.5;
+}
+.quinn-msg.bot {
+  align-self: flex-start;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-primary);
+}
+.quinn-msg.user {
+  align-self: flex-end;
+  background: var(--aqua); color: #fff;
+}
+.quinn-msg .msg-time {
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-muted);
+  margin-top: 4px; display: block;
+}
+.quinn-msg.user .msg-time { color: rgba(255,255,255,0.6); }
+
+.quinn-tool-chips {
+  display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px;
+}
+.tool-chip {
+  font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+  background: var(--aqua-glow); color: var(--aqua);
+  border: 1px solid rgba(87,172,175,0.2);
+  padding: 2px 8px; border-radius: 10px;
+}
+
+.quinn-action-btns {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+}
+.quinn-action-btn {
+  font-size: 12px; font-weight: 500; padding: 5px 12px;
+  background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--aqua);
+  cursor: pointer; transition: all var(--transition); font-family: var(--font-body);
+}
+.quinn-action-btn:hover { border-color: var(--aqua); background: var(--aqua-glow); }
+
+.quinn-typing {
+  display: flex; gap: 4px; padding: 10px 14px; align-self: flex-start;
+}
+.quinn-typing span {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted);
+  animation: typing 1.4s infinite;
+}
+.quinn-typing span:nth-child(2) { animation-delay: 0.2s; }
+.quinn-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-4px); }
+}
+
+.quinn-input-area {
+  padding: 12px 16px; border-top: 1px solid var(--border);
+  display: flex; gap: 8px; align-items: flex-end;
+}
+.quinn-input {
+  flex: 1; background: var(--bg-input); border: 1px solid var(--border);
+  border-radius: var(--radius); color: var(--text-primary);
+  font-family: var(--font-body); font-size: 13px;
+  padding: 10px 14px; outline: none; resize: none;
+  transition: border-color var(--transition);
+  min-height: 40px; max-height: 100px;
+}
+.quinn-input:focus { border-color: var(--aqua); box-shadow: 0 0 0 2px var(--aqua-glow); }
+.quinn-input::placeholder { color: var(--text-muted); }
+.quinn-send {
+  width: 38px; height: 38px; border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, var(--aqua), var(--aqua-dim));
+  border: none; color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition); flex-shrink: 0;
+}
+.quinn-send:hover { box-shadow: 0 0 12px var(--aqua-glow-strong); }
+.quinn-send svg { width: 16px; height: 16px; }
+
+.quinn-quick {
+  padding: 8px 16px; border-top: 1px solid var(--border-light);
+  display: flex; gap: 6px; overflow-x: auto;
+}
+.quick-cmd {
+  font-family: var(--font-mono); font-size: 11px;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  padding: 3px 10px; border-radius: 12px; color: var(--text-muted);
+  cursor: pointer; white-space: nowrap; transition: all var(--transition);
+}
+.quick-cmd:hover { border-color: var(--aqua-dim); color: var(--aqua); }
+
+/* ===== STATUS TIMELINE (RFQ row expand indicator) ===== */
+.pipeline-mini {
+  display: flex; align-items: center; gap: 2px;
+}
+.pipeline-step {
+  width: 14px; height: 3px; border-radius: 2px; background: var(--border);
+  transition: all var(--transition);
+}
+.pipeline-step.done { background: var(--aqua); }
+.pipeline-step.active {
+  background: var(--aqua);
+  box-shadow: 0 0 6px var(--aqua-glow-strong);
+  animation: glow-pulse 2s infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 4px var(--aqua-glow); }
+  50% { box-shadow: 0 0 10px var(--aqua-glow-strong); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1279px) {
+  .sidebar { width: var(--sidebar-collapsed-w); min-width: var(--sidebar-collapsed-w); }
+  .sidebar .logo-text, .sidebar .nav-item span, .sidebar .nav-badge,
+  .sidebar .nav-section-label, .sidebar .user-info { display: none; }
+  .sidebar-logo { padding: 16px; justify-content: center; }
+  .nav-item { justify-content: center; padding: 10px; }
+  .nav-item svg { margin: 0; }
+  .sidebar-user { justify-content: center; }
+  .quinn-panel { display: none; }
+}
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .topbar-search { display: none; }
+  .filter-bar { flex-direction: column; }
+  .filter-bar > * { width: 100%; }
+  .filter-divider { display: none; }
+  td, th { padding: 8px 10px; font-size: 12px; }
+  .page-header { flex-direction: column; align-items: flex-start; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">RX</div>
+    <div class="logo-text">RFQ<span>X</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      <span>Dashboard</span>
+    </a>
+    <a class="nav-item active" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>
+      <span>RFQ Inbox</span>
+      <span class="nav-badge">12</span>
+    </a>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <span>Quote Builder</span>
+    </a>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      <span>Cost Library</span>
+    </a>
+    <div class="nav-section-label">Intelligence</div>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      <span>Buyers</span>
+    </a>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      <span>Analytics</span>
+    </a>
+    <div class="nav-section-label">System</div>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      <span>Settings</span>
+    </a>
+    <a class="nav-item" href="#">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>Help</span>
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="user-avatar">RM</div>
+      <div class="user-info">
+        <div class="user-name">Rahim M.</div>
+        <div class="user-role">Quotation Manager</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ===== MAIN WRAPPER ===== -->
+<div class="main-wrapper">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-breadcrumb">
+      <a href="#">Dashboard</a>
+      <span class="sep">›</span>
+      <span class="current">RFQ Inbox</span>
+    </div>
+    <div class="topbar-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search RFQs, quotes, buyers...</span>
+      <kbd>Ctrl+K</kbd>
+    </div>
+    <div class="topbar-actions">
+      <button class="topbar-btn" title="Notifications">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </button>
+      <button class="quinn-toggle-btn">QUINN</button>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+    <div class="content-main">
+
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">RFQ Inbox</h1>
+          <p class="page-subtitle">12 open requests · 3 urgent deadlines</p>
+        </div>
+        <div class="page-actions">
+          <div class="view-toggle">
+            <button class="view-toggle-btn active">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+              List
+            </button>
+            <button class="view-toggle-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              Board
+            </button>
+          </div>
+          <button class="btn-secondary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload RFQ
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="filter-bar">
+        <select class="filter-select">
+          <option>All Status</option>
+          <option>New</option>
+          <option>Extracting</option>
+          <option>Costing</option>
+          <option>Review</option>
+          <option>Sent</option>
+          <option>Followed Up</option>
+          <option>Won</option>
+          <option>Lost</option>
+        </select>
+        <select class="filter-select">
+          <option>All Buyers</option>
+          <option>H&M</option>
+          <option>Primark</option>
+          <option>Zara</option>
+          <option>ASOS</option>
+          <option>Target</option>
+          <option>Next UK</option>
+          <option>Bestseller</option>
+        </select>
+        <select class="filter-select">
+          <option>All Priority</option>
+          <option>P1 - Critical</option>
+          <option>P2 - High</option>
+          <option>P3 - Medium</option>
+          <option>P4 - Low</option>
+          <option>P5 - Minimal</option>
+        </select>
+        <select class="filter-select">
+          <option>All Assigned</option>
+          <option>Rahim M.</option>
+          <option>Sarah K.</option>
+          <option>Tanvir H.</option>
+          <option>Nadia A.</option>
+        </select>
+        <input type="date" class="filter-select" style="min-width: 130px;" value="2026-02-01">
+        <span style="color:var(--text-muted); font-size:12px;">to</span>
+        <input type="date" class="filter-select" style="min-width: 130px;" value="2026-03-07">
+        <div class="filter-divider"></div>
+        <div class="filter-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Search RFQ #, buyer, product...">
+        </div>
+      </div>
+
+      <!-- Bulk Actions Bar (shown when items selected) -->
+      <div class="bulk-bar">
+        <span class="bulk-count">2 selected</span>
+        <span style="color:var(--text-secondary)">—</span>
+        <div class="bulk-actions">
+          <button class="bulk-btn">Assign To</button>
+          <button class="bulk-btn">Change Priority</button>
+          <button class="bulk-btn">Archive</button>
+          <button class="bulk-btn">Export CSV</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:36px"><div class="checkbox"></div></th>
+              <th class="sorted">RFQ # <span class="sort-icon">▼</span></th>
+              <th>Buyer</th>
+              <th>Product</th>
+              <th>Quantity</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Source</th>
+              <th>Deadline</th>
+              <th>Assigned</th>
+              <th>Created</th>
+              <th>Pipeline</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Row 1 -->
+            <tr>
+              <td><div class="checkbox checked"></div></td>
+              <td><span class="rfq-num">RFQ-2603-0042</span></td>
+              <td>
+                <div class="buyer-cell">
+                  <div class="buyer-logo">H&M</div>
+                  <div>
+                    <div class="buyer-name">H&M</div>
+                    <div class="buyer-tier">★★★★★</div>
+                  </div>
+                </div>
+              </td>
+              <td>Polo Shirt (Piqué)</td>
+              <td><span class="qty">50,000</span></td>
+              <td><span class="priority-badge priority-1"><span class="priority-dot"></span> P1</span></td>
+              <td><span class="status-badge status-review"><span class="status-dot"></span> Review</span></td>
+              <td><div class="source-icon source-email" title="Email">✉</div></td>
+              <td><span class="deadline deadline-urgent">2h left</span></td>
+              <td><div class="assigned-avatar" style="background:linear-gradient(135deg,#57ACAF,#3D8A8D)" title="Rahim M.">RM</div></td>
+              <td><span class="timestamp">2h ago</span></td>
+              <td>
+                <div class="pipeline-mini">
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step active"></div>
+                  <div class="pipeline-step"></div>
+                  <div class="pipeline-step"></div>
+                </div>
+              </td>
+            </tr>
+            <!-- Row 2 -->
+            <tr>
+              <td><div class="checkbox checked"></div></td>
+              <td><span class="rfq-num">RFQ-2603-0041</span></td>
+              <td>
+                <div class="buyer-cell">
+                  <div class="buyer-logo">PM</div>
+                  <div>
+                    <div class="buyer-name">Primark</div>
+                    <div class="buyer-tier">★★★★★</div>
+                  </div>
+                </div>
+              </td>
+              <td>Basic T-Shirt (Jersey)</td>
+              <td><span class="qty">120,000</span></td>
+              <td><span class="priority-badge priority-1"><span class="priority-dot"></span> P1</span></td>
+              <td><span class="status-badge status-costing"><span class="status-dot"></span> Costing</span></td>
+              <td><div class="source-icon source-portal" title="Portal">⬡</div></td>
+              <td><span class="deadline deadline-urgent">5h left</span></td>
+              <td><div class="assigned-avatar" style="background:linear-gradient(135deg,#A855F7,#7C3AED)" title="Sarah K.">SK</div></td>
+              <td><span class="timestamp">4h ago</span></td>
+              <td>
+                <div class="pipeline-mini">
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step active"></div>
+                  <div class="pipeline-step"></div>
+                  <div class="pipeline-step"></div>
+                  <div class="pipeline-step"></div>
+                </div>
+              </td>
+            </tr>
+            <!-- Row 3 -->
+            <tr>
+              <td><div class="checkbox"></div></td>
+              <td><span class="rfq-num">RFQ-2603-0040</span></td>
+              <td>
+                <div class="buyer-cell">
+                  <div class="buyer-logo">ZR</div>
+                  <div>
+                    <div class="buyer-name">Zara</div>
+                    <div class="buyer-tier">★★★★☆</div>
+                  </div>
+                </div>
+              </td>
+              <td>Denim Jacket (12oz Twill)</td>
+              <td><span class="qty">25,000</span></td>
+              <td><span class="priority-badge priority-2"><span class="priority-dot"></span> P2</span></td>
+              <td><span class="status-badge status-extracting"><span class="status-dot"></span> Extracting</span></td>
+              <td><div class="source-icon source-email" title="Email">✉</div></td>
+              <td><span class="deadline deadline-warn">18h left</span></td>
+              <td><div class="assigned-avatar" style="background:linear-gradient(135deg,#F97316,#EA580C)" title="Tanvir H.">TH</div></td>
+              <td><span class="timestamp">6h ago</span></td>
+              <td>
+                <div class="pipeline-mini">
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step active"></div>
+                  <div class="pipeline-step"></div>
+                  <div class="pipeline-step"></div>
+                  <div class="pipeline-step"></div>
+                  <div class="pipeline-step"></div>
+                </div>
+              </td>
+            </tr>
+            <!-- Row 4 -->
+            <tr>
+              <td><div class="checkbox"></div></td>
+              <td><span class="rfq-num">RFQ-2603-0039</span></td>
+              <td>
+                <div class="buyer-cell">
+                  <div class="buyer-logo">AS</div>
+                  <div>
+                    <div class="buyer-name">ASOS</div>
+                    <div class="buyer-tier">★★★★☆</div>
+                  </div>
+                </div>
+              </td>
+              <td>Hoodie (Fleece 320 GSM)</td>
+              <td><span class="qty">30,000</span></td>
+              <td><span class="priority-badge priority-2"><span class="priority-dot"></span> P2</span></td>
+              <td><span class="status-badge status-new"><span class="status-dot"></span> New</span></td>
+              <td><div class="source-icon source-whatsapp" title="WhatsApp">💬</div></td>
+              <td><span class="deadline deadline-ok">2d left</span></td>
+              <td><div class="assigned-avatar" style="background:linear-gradient(135deg,#EAB308,#CA8A04)" title="Nadia A.">NA</div></td>
+              <td><span class="timestamp">8h ago</span></td>
+              <td>
+                <div class="pipeline-mini">
+                  <div class="pipeline-step active"></div>
+                  <div class="pipeline-step"></div>
+                  <div class="pipeline-step"></div>
+                  <div class="pipeline-step"></div>
+                  <div class="pipeline-step"></div>
+                  <div class="pipeline-step"></div>
+                </div>
+              </td>
+            </tr>
+            <!-- Row 5 -->
+            <tr>
+              <td><div class="checkbox"></div></td>
+              <td><span class="rfq-num">RFQ-2603-0038</span></td>
+              <td>
+                <div class="buyer-cell">
+                  <div class="buyer-logo">TG</div>
+                  <div>
+                    <div class="buyer-name">Target</div>
+                    <div class="buyer-tier">★★★★☆</div>
+                  </div>
+                </div>
+              </td>
+              <td>Chino Trouser (Twill)</td>
+              <td><span class="qty">40,000</span></td>
+              <td><span class="priority-badge priority-3"><span class="priority-dot"></span> P3</span></td>
+              <td><span class="status-badge status-sent"><span class="status-dot"></span> Sent</span></td>
+              <td><div class="source-icon source-email" title="Email">✉</div></td>
+              <td><span class="deadline deadline-ok">3d left</span></td>
+              <td><div class="assigned-avatar" style="background:linear-gradient(135deg,#57ACAF,#3D8A8D)" title="Rahim M.">RM</div></td>
+              <td><span class="timestamp">1d ago</span></td>
+              <td>
+                <div class="pipeline-mini">
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step active"></div>
+                  <div class="pipeline-step"></div>
+                </div>
+              </td>
+            </tr>
+            <!-- Row 6 -->
+            <tr>
+              <td><div class="checkbox"></div></td>
+              <td><span class="rfq-num">RFQ-2603-0037</span></td>
+              <td>
+                <div class="buyer-cell">
+                  <div class="buyer-logo">NX</div>
+                  <div>
+                    <div class="buyer-name">Next UK</div>
+                    <div class="buyer-tier">★★★☆☆</div>
+                  </div>
+                </div>
+              </td>
+              <td>Kids Jogger (French Terry)</td>
+              <td><span class="qty">60,000</span></td>
+              <td><span class="priority-badge priority-3"><span class="priority-dot"></span> P3</span></td>
+              <td><span class="status-badge status-followed"><span class="status-dot"></span> Followed Up</span></td>
+              <td><div class="source-icon source-portal" title="Portal">⬡</div></td>
+              <td><span class="deadline deadline-ok">5d left</span></td>
+              <td><div class="assigned-avatar" style="background:linear-gradient(135deg,#A855F7,#7C3AED)" title="Sarah K.">SK</div></td>
+              <td><span class="timestamp">2d ago</span></td>
+              <td>
+                <div class="pipeline-mini">
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step active"></div>
+                </div>
+              </td>
+            </tr>
+            <!-- Row 7 -->
+            <tr>
+              <td><div class="checkbox"></div></td>
+              <td><span class="rfq-num">RFQ-2603-0036</span></td>
+              <td>
+                <div class="buyer-cell">
+                  <div class="buyer-logo">BS</div>
+                  <div>
+                    <div class="buyer-name">Bestseller</div>
+                    <div class="buyer-tier">★★★★☆</div>
+                  </div>
+                </div>
+              </td>
+              <td>Oxford Shirt (Poplin)</td>
+              <td><span class="qty">35,000</span></td>
+              <td><span class="priority-badge priority-4"><span class="priority-dot"></span> P4</span></td>
+              <td><span class="status-badge status-won"><span class="status-dot"></span> Won</span></td>
+              <td><div class="source-icon source-email" title="Email">✉</div></td>
+              <td><span class="deadline" style="color:var(--text-muted)">Closed</span></td>
+              <td><div class="assigned-avatar" style="background:linear-gradient(135deg,#F97316,#EA580C)" title="Tanvir H.">TH</div></td>
+              <td><span class="timestamp">3d ago</span></td>
+              <td>
+                <div class="pipeline-mini">
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                </div>
+              </td>
+            </tr>
+            <!-- Row 8 -->
+            <tr>
+              <td><div class="checkbox"></div></td>
+              <td><span class="rfq-num">RFQ-2602-0035</span></td>
+              <td>
+                <div class="buyer-cell">
+                  <div class="buyer-logo">H&M</div>
+                  <div>
+                    <div class="buyer-name">H&M</div>
+                    <div class="buyer-tier">★★★★★</div>
+                  </div>
+                </div>
+              </td>
+              <td>Cargo Shorts (Canvas)</td>
+              <td><span class="qty">80,000</span></td>
+              <td><span class="priority-badge priority-5"><span class="priority-dot"></span> P5</span></td>
+              <td><span class="status-badge status-lost"><span class="status-dot"></span> Lost</span></td>
+              <td><div class="source-icon source-upload" title="Upload">↑</div></td>
+              <td><span class="deadline" style="color:var(--text-muted)">Expired</span></td>
+              <td><div class="assigned-avatar" style="background:linear-gradient(135deg,#57ACAF,#3D8A8D)" title="Rahim M.">RM</div></td>
+              <td><span class="timestamp">5d ago</span></td>
+              <td>
+                <div class="pipeline-mini">
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step done"></div>
+                  <div class="pipeline-step" style="background:var(--red);"></div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-footer">
+          <span class="showing">Showing 1–8 of 12 RFQs</span>
+          <div class="pagination">
+            <button class="page-btn" disabled>‹</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">›</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== QUINN PANEL ===== -->
+    <aside class="quinn-panel">
+      <div class="quinn-header">
+        <div class="quinn-avatar">Q</div>
+        <div>
+          <div class="quinn-label">QUINN</div>
+          <div class="quinn-status">Online</div>
+        </div>
+        <div class="quinn-header-actions">
+          <button class="quinn-header-btn" title="Expand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          </button>
+          <button class="quinn-header-btn" title="Minimize">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="quinn-messages">
+        <!-- Bot message -->
+        <div class="quinn-msg bot">
+          Good morning, Rahim! You have <strong>3 urgent RFQs</strong> that need attention today.
+          <div class="quinn-tool-chips">
+            <span class="tool-chip">list_rfqs</span>
+            <span class="tool-chip">priority:urgent</span>
+          </div>
+          <span class="msg-time">09:12 AM</span>
+        </div>
+        <!-- Bot message with table -->
+        <div class="quinn-msg bot">
+          Here's your priority summary:
+          <div style="margin-top:8px; font-family:var(--font-mono); font-size:11px; line-height:1.6;">
+            <div style="display:flex; justify-content:space-between; padding:2px 0; border-bottom:1px solid var(--border);">
+              <span style="color:var(--red)">● H&M Polo</span>
+              <span style="color:var(--text-muted)">2h left</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:2px 0; border-bottom:1px solid var(--border);">
+              <span style="color:var(--red)">● Primark Tee</span>
+              <span style="color:var(--text-muted)">5h left</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:2px 0;">
+              <span style="color:var(--orange)">● Zara Jacket</span>
+              <span style="color:var(--text-muted)">18h left</span>
+            </div>
+          </div>
+          <div class="quinn-action-btns">
+            <button class="quinn-action-btn">Open H&M RFQ</button>
+            <button class="quinn-action-btn">Build Quote</button>
+          </div>
+          <span class="msg-time">09:12 AM</span>
+        </div>
+        <!-- User message -->
+        <div class="quinn-msg user">
+          Build a quote for the H&M polo at 18% margin
+          <span class="msg-time">09:14 AM</span>
+        </div>
+        <!-- Bot message -->
+        <div class="quinn-msg bot">
+          Building quote for <strong>RFQ-2603-0042</strong> (H&M Polo Shirt, 50,000 units)...
+          <div class="quinn-tool-chips">
+            <span class="tool-chip">build_quote</span>
+            <span class="tool-chip">margin: 18%</span>
+            <span class="tool-chip">cost_engine</span>
+          </div>
+          <div style="margin-top:10px; font-family:var(--font-mono); font-size:11px; line-height:1.7; background:var(--bg-input); padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border);">
+            <div style="display:flex; justify-content:space-between;"><span>Fabric (220 GSM piqué)</span><span style="color:var(--aqua)">$2.4500</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>CMT</span><span style="color:var(--aqua)">$1.8200</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>Trims + Wash + Pack</span><span style="color:var(--aqua)">$0.6800</span></div>
+            <div style="display:flex; justify-content:space-between;"><span>OH + Commission</span><span style="color:var(--aqua)">$0.4100</span></div>
+            <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border); margin-top:4px; padding-top:4px; font-weight:600;">
+              <span>FOB/Unit</span><span style="color:var(--yellow)">$6.5200</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-weight:600;">
+              <span>Total FOB</span><span style="color:var(--yellow)">$326,000.00</span>
+            </div>
+          </div>
+          <div class="quinn-action-btns">
+            <button class="quinn-action-btn">Approve Quote</button>
+            <button class="quinn-action-btn">Adjust Margin</button>
+            <button class="quinn-action-btn">Compare Scenarios</button>
+          </div>
+          <span class="msg-time">09:14 AM</span>
+        </div>
+        <!-- Typing indicator -->
+        <div class="quinn-typing">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="quinn-quick">
+        <button class="quick-cmd">/status</button>
+        <button class="quick-cmd">/quote</button>
+        <button class="quick-cmd">/assign</button>
+        <button class="quick-cmd">/follow-up</button>
+        <button class="quick-cmd">/report</button>
+      </div>
+      <div class="quinn-input-area">
+        <textarea class="quinn-input" rows="1" placeholder="Ask QUINN anything... (/ for commands)"></textarea>
+        <button class="quinn-send">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+</body>
+</html>

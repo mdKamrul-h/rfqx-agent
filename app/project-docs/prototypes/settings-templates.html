@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RFQX — Settings / Templates</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-primary: #0C1420;
+  --bg-secondary: #131E30;
+  --bg-tertiary: #1A2640;
+  --bg-card: #162032;
+  --bg-input: #0F1926;
+  --bg-hover: #1E2D45;
+  --bg-active: rgba(87, 172, 175, 0.1);
+  --border: #253550;
+  --border-focus: #57ACAF;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --aqua: #57ACAF;
+  --aqua-hover: #6BC0C3;
+  --aqua-dim: rgba(87, 172, 175, 0.15);
+  --yellow: #EAB308;
+  --yellow-dim: rgba(234, 179, 8, 0.12);
+  --green: #22C55E;
+  --green-dim: rgba(34, 197, 94, 0.12);
+  --red: #EF4444;
+  --red-dim: rgba(239, 68, 68, 0.1);
+  --orange: #F97316;
+  --purple: #A855F7;
+  --purple-dim: rgba(168, 85, 247, 0.12);
+  --blue: #3B82F6;
+  --blue-dim: rgba(59, 130, 246, 0.12);
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --radius: 8px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.5);
+  --transition: 150ms ease;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+}
+
+.sidebar-logo {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-logo .logo-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--aqua);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #0C1420;
+}
+
+.sidebar-logo .logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.sidebar-logo .logo-text span {
+  color: var(--aqua);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-section {
+  margin-bottom: 8px;
+}
+
+.nav-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  padding: 8px 12px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all var(--transition);
+  cursor: pointer;
+  margin-bottom: 2px;
+}
+
+.nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background: var(--bg-active);
+  color: var(--aqua);
+}
+
+.nav-item .nav-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-item .nav-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--red);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.nav-spacer { flex: 1; }
+
+.sidebar-user {
+  padding: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-user .user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--aqua), #3B82F6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.sidebar-user .user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sidebar-user .user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user .user-role {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Main content */
+.main {
+  margin-left: 250px;
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top bar */
+.topbar {
+  height: 56px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.breadcrumb a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.breadcrumb a:hover {
+  color: var(--aqua);
+}
+
+.breadcrumb .separator {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.breadcrumb .current {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.topbar-spacer { flex: 1; }
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font);
+}
+
+.search-trigger:hover {
+  border-color: var(--text-muted);
+  color: var(--text-secondary);
+}
+
+.search-trigger kbd {
+  font-family: var(--font);
+  font-size: 11px;
+  background: var(--bg-primary);
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+}
+
+.icon-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-btn .notif-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background: var(--red);
+  border-radius: 50%;
+  border: 2px solid var(--bg-secondary);
+}
+
+/* Page content */
+.page-content {
+  flex: 1;
+  padding: 24px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Settings Tabs */
+.settings-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+  gap: 0;
+  overflow-x: auto;
+}
+
+.settings-tab {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.settings-tab:hover {
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.02);
+}
+
+.settings-tab.active {
+  color: var(--aqua);
+  border-bottom-color: var(--aqua);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--aqua);
+  color: #0C1420;
+  border-color: var(--aqua);
+}
+
+.btn-primary:hover {
+  background: var(--aqua-hover);
+  border-color: var(--aqua-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(87, 172, 175, 0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.btn-ghost {
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-ghost:hover {
+  background: var(--bg-hover);
+  border-color: var(--text-muted);
+  color: var(--text-primary);
+}
+
+.btn-ghost.danger:hover {
+  color: var(--red);
+  border-color: var(--red);
+  background: var(--red-dim);
+}
+
+.btn-ghost svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Template list section */
+.form-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.form-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.form-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-section-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Template table */
+.template-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.template-table thead th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.template-table tbody tr {
+  transition: background var(--transition);
+}
+
+.template-table tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+.template-table tbody td {
+  padding: 14px 14px;
+  font-size: 13px;
+  color: var(--text-primary);
+  border-bottom: 1px solid rgba(37, 53, 80, 0.5);
+  vertical-align: middle;
+}
+
+.template-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* Template name cell */
+.template-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.template-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.template-icon.pdf {
+  background: var(--red-dim);
+  color: var(--red);
+}
+
+.template-icon.excel {
+  background: var(--green-dim);
+  color: var(--green);
+}
+
+.template-name-info .template-name {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.template-name-info .template-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Badge */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 50px;
+  white-space: nowrap;
+}
+
+.badge-aqua {
+  background: var(--aqua-dim);
+  color: var(--aqua);
+}
+
+.badge-yellow {
+  background: var(--yellow-dim);
+  color: var(--yellow);
+}
+
+.badge-blue {
+  background: var(--blue-dim);
+  color: var(--blue);
+}
+
+.badge-purple {
+  background: var(--purple-dim);
+  color: var(--purple);
+}
+
+.badge-green {
+  background: var(--green-dim);
+  color: var(--green);
+}
+
+.badge-muted {
+  background: rgba(100, 116, 139, 0.15);
+  color: var(--text-muted);
+}
+
+/* Toggle switch */
+.toggle {
+  position: relative;
+  width: 38px;
+  height: 22px;
+  cursor: pointer;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-slider {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  transition: all var(--transition);
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 2px;
+  top: 2px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  transition: all var(--transition);
+}
+
+.toggle input:checked + .toggle-slider {
+  background: var(--aqua);
+  border-color: var(--aqua);
+}
+
+.toggle input:checked + .toggle-slider::before {
+  transform: translateX(16px);
+  background: white;
+}
+
+/* Action buttons cell */
+.action-cell {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Empty state */
+.empty-template-hint {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  background: var(--bg-input);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  margin-top: 16px;
+}
+
+.empty-template-hint .hint-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--aqua-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.empty-template-hint .hint-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--aqua);
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.empty-template-hint .hint-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.empty-template-hint .hint-text strong {
+  color: var(--text-primary);
+}
+
+/* Template preview modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  width: 680px;
+  max-width: 95vw;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.modal-close:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.modal-close svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.modal-body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Template preview card */
+.template-preview {
+  background: white;
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  color: #1a1a1a;
+  font-size: 12px;
+  line-height: 1.5;
+  min-height: 380px;
+}
+
+.template-preview .tp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #1a1a1a;
+}
+
+.template-preview .tp-factory-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.template-preview .tp-factory-addr {
+  font-size: 10px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.template-preview .tp-quote-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-align: right;
+  color: #1a1a1a;
+}
+
+.template-preview .tp-quote-ref {
+  font-size: 10px;
+  color: #666;
+  text-align: right;
+  margin-top: 4px;
+}
+
+.template-preview .tp-section-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #333;
+  margin: 16px 0 8px;
+  letter-spacing: 0.05em;
+}
+
+.template-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 12px;
+}
+
+.template-preview table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  color: #666;
+  padding: 6px 8px;
+  border-bottom: 1px solid #ddd;
+  text-transform: uppercase;
+}
+
+.template-preview table td {
+  font-size: 11px;
+  padding: 5px 8px;
+  border-bottom: 1px solid #eee;
+  color: #333;
+}
+
+.template-preview table .total-row td {
+  font-weight: 700;
+  border-top: 2px solid #1a1a1a;
+  border-bottom: none;
+  padding-top: 8px;
+}
+
+.template-preview .tp-footer {
+  margin-top: 20px;
+  padding-top: 12px;
+  border-top: 1px solid #ddd;
+  font-size: 10px;
+  color: #888;
+  text-align: center;
+}
+
+/* Template editor sections */
+.template-editor-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.editor-section-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: grab;
+  transition: all var(--transition);
+}
+
+.editor-section-item:hover {
+  border-color: var(--aqua);
+  background: var(--bg-hover);
+}
+
+.editor-section-item .drag-handle {
+  color: var(--text-muted);
+  display: flex;
+  flex-shrink: 0;
+}
+
+.editor-section-item .drag-handle svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+}
+
+.editor-section-item .section-info {
+  flex: 1;
+}
+
+.editor-section-item .section-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.editor-section-item .section-desc {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.editor-section-item .section-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Form fields for modal */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.form-label .required {
+  color: var(--red);
+  margin-left: 2px;
+}
+
+.form-input,
+.form-select {
+  padding: 9px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: var(--font);
+  transition: all var(--transition);
+  outline: none;
+}
+
+.form-input:hover,
+.form-select:hover {
+  border-color: #3A5070;
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--aqua);
+  box-shadow: 0 0 0 3px var(--aqua-dim);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2364748B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.form-select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.form-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.form-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Stats row for templates overview */
+.template-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.template-stat-card {
+  flex: 1;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.template-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.template-stat-icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.template-stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.template-stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* QUINN FAB */
+.quinn-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--aqua), #3B9DA0);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(87, 172, 175, 0.4);
+  transition: all var(--transition);
+  z-index: 200;
+}
+
+.quinn-fab:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 24px rgba(87, 172, 175, 0.5);
+}
+
+.quinn-fab svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* fabricXai brand tag */
+.brand-tag {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+}
+
+.brand-tag .brand-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--yellow);
+  border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 1279px) {
+  .sidebar { width: 64px; }
+  .sidebar-logo .logo-text,
+  .nav-item span,
+  .nav-section-label,
+  .sidebar-user .user-info,
+  .nav-badge,
+  .brand-tag span { display: none; }
+  .sidebar-logo { padding: 16px; justify-content: center; }
+  .sidebar-nav { padding: 8px; }
+  .nav-item { justify-content: center; padding: 10px; }
+  .sidebar-user { justify-content: center; padding: 12px; }
+  .brand-tag { justify-content: center; }
+  .main { margin-left: 64px; }
+  .template-stats { flex-wrap: wrap; }
+  .template-stat-card { min-width: calc(50% - 8px); }
+}
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .settings-tabs { gap: 0; }
+  .settings-tab { padding: 10px 12px; font-size: 12px; }
+  .page-content { padding: 16px; }
+  .topbar { padding: 0 16px; }
+  .search-trigger kbd { display: none; }
+  .template-stats { flex-direction: column; }
+  .template-table { font-size: 12px; }
+  .form-grid-2 { grid-template-columns: 1fr; }
+  .page-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+  .template-table thead th:nth-child(3),
+  .template-table tbody td:nth-child(3),
+  .template-table thead th:nth-child(5),
+  .template-table tbody td:nth-child(5) { display: none; }
+  .modal { width: 95vw; max-height: 90vh; }
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">R</div>
+    <div class="logo-text">RFQ<span>X</span></div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-label">Main</div>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+        <span>Dashboard</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg></span>
+        <span>RFQ Inbox</span>
+        <span class="nav-badge">7</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg></span>
+        <span>Quote Builder</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></span>
+        <span>Cost Library</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>
+        <span>Buyers</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+        <span>Analytics</span>
+      </a>
+    </div>
+
+    <div class="nav-spacer"></div>
+
+    <div class="nav-section">
+      <a href="#" class="nav-item active">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.32 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>
+        <span>Settings</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+        <span>Help</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="brand-tag">
+    <span class="brand-dot"></span>
+    <span>fabricXai Platform</span>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="user-avatar">RA</div>
+    <div class="user-info">
+      <div class="user-name">Rahim Ahmed</div>
+      <div class="user-role">Owner</div>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="breadcrumb">
+      <a href="#">Settings</a>
+      <span class="separator">/</span>
+      <span class="current">Templates</span>
+    </div>
+
+    <div class="topbar-spacer"></div>
+
+    <div class="topbar-actions">
+      <button class="search-trigger">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search...
+        <kbd>Ctrl+K</kbd>
+      </button>
+
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </button>
+
+      <button class="icon-btn" title="QUINN Copilot">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="page-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Settings</h1>
+        <p class="page-subtitle">Manage your factory profile, team, integrations, and preferences</p>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary">
+          <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Create Template
+        </button>
+      </div>
+    </div>
+
+    <!-- Settings Tabs -->
+    <div class="settings-tabs">
+      <a href="#" class="settings-tab">Factory Profile</a>
+      <a href="#" class="settings-tab">Team</a>
+      <a href="#" class="settings-tab">Integrations</a>
+      <a href="#" class="settings-tab active">Templates</a>
+      <a href="#" class="settings-tab">Routing Rules</a>
+      <a href="#" class="settings-tab">Notifications</a>
+      <a href="#" class="settings-tab">Billing</a>
+      <a href="#" class="settings-tab">Audit Log</a>
+    </div>
+
+    <!-- Stats -->
+    <div class="template-stats">
+      <div class="template-stat-card">
+        <div class="template-stat-icon" style="background: var(--aqua-dim); color: var(--aqua);">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+        </div>
+        <div>
+          <div class="template-stat-value">7</div>
+          <div class="template-stat-label">Total Templates</div>
+        </div>
+      </div>
+      <div class="template-stat-card">
+        <div class="template-stat-icon" style="background: var(--red-dim); color: var(--red);">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <div>
+          <div class="template-stat-value">5</div>
+          <div class="template-stat-label">PDF Templates</div>
+        </div>
+      </div>
+      <div class="template-stat-card">
+        <div class="template-stat-icon" style="background: var(--green-dim); color: var(--green);">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+        </div>
+        <div>
+          <div class="template-stat-value">2</div>
+          <div class="template-stat-label">Excel Templates</div>
+        </div>
+      </div>
+      <div class="template-stat-card">
+        <div class="template-stat-icon" style="background: var(--yellow-dim); color: var(--yellow);">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div>
+          <div class="template-stat-value">1</div>
+          <div class="template-stat-label">Default Template</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Template List -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <div>
+          <h2 class="form-section-title">Quote Templates</h2>
+          <p class="form-section-desc">Manage buyer-specific and generic quote templates for PDF and Excel output</p>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-secondary btn-sm">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Import
+          </button>
+          <button class="btn btn-secondary btn-sm">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export All
+          </button>
+        </div>
+      </div>
+
+      <table class="template-table">
+        <thead>
+          <tr>
+            <th>Template Name</th>
+            <th>Buyer</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Last Modified</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Row 1: Default template -->
+          <tr>
+            <td>
+              <div class="template-name-cell">
+                <div class="template-icon pdf">PDF</div>
+                <div class="template-name-info">
+                  <div class="template-name">Standard FOB Quote</div>
+                  <div class="template-desc">Default quote template with full cost breakdown</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge badge-muted">Generic</span></td>
+            <td><span class="badge badge-blue">PDF</span></td>
+            <td>
+              <label class="toggle">
+                <input type="checkbox" checked />
+                <span class="toggle-slider"></span>
+              </label>
+            </td>
+            <td style="color:var(--text-secondary);font-size:12px;">Mar 5, 2026</td>
+            <td>
+              <div class="action-cell">
+                <button class="btn-ghost" title="Edit">
+                  <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button class="btn-ghost" title="Preview">
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Preview
+                </button>
+                <button class="btn-ghost" title="Duplicate">
+                  <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 2: H&M CIQ -->
+          <tr>
+            <td>
+              <div class="template-name-cell">
+                <div class="template-icon pdf">PDF</div>
+                <div class="template-name-info">
+                  <div class="template-name">H&M CIQ Template</div>
+                  <div class="template-desc">Cost, Insurance & Quote format for H&M sourcing</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge badge-aqua">H&M</span></td>
+            <td><span class="badge badge-blue">PDF</span></td>
+            <td>
+              <label class="toggle">
+                <input type="checkbox" />
+                <span class="toggle-slider"></span>
+              </label>
+            </td>
+            <td style="color:var(--text-secondary);font-size:12px;">Mar 3, 2026</td>
+            <td>
+              <div class="action-cell">
+                <button class="btn-ghost" title="Edit">
+                  <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button class="btn-ghost" title="Preview">
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Preview
+                </button>
+                <button class="btn-ghost" title="Duplicate">
+                  <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 3: Primark Supplier Form -->
+          <tr>
+            <td>
+              <div class="template-name-cell">
+                <div class="template-icon excel">XLS</div>
+                <div class="template-name-info">
+                  <div class="template-name">Primark Supplier Form</div>
+                  <div class="template-desc">Primark vendor portal costing sheet format</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge badge-purple">Primark</span></td>
+            <td><span class="badge badge-green">Excel</span></td>
+            <td>
+              <label class="toggle">
+                <input type="checkbox" />
+                <span class="toggle-slider"></span>
+              </label>
+            </td>
+            <td style="color:var(--text-secondary);font-size:12px;">Feb 28, 2026</td>
+            <td>
+              <div class="action-cell">
+                <button class="btn-ghost" title="Edit">
+                  <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button class="btn-ghost" title="Preview">
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Preview
+                </button>
+                <button class="btn-ghost" title="Duplicate">
+                  <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 4: Zara B2B -->
+          <tr>
+            <td>
+              <div class="template-name-cell">
+                <div class="template-icon pdf">PDF</div>
+                <div class="template-name-info">
+                  <div class="template-name">Zara B2B Quote</div>
+                  <div class="template-desc">Inditex group standard quote document</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge badge-yellow">Zara</span></td>
+            <td><span class="badge badge-blue">PDF</span></td>
+            <td>
+              <label class="toggle">
+                <input type="checkbox" />
+                <span class="toggle-slider"></span>
+              </label>
+            </td>
+            <td style="color:var(--text-secondary);font-size:12px;">Feb 22, 2026</td>
+            <td>
+              <div class="action-cell">
+                <button class="btn-ghost" title="Edit">
+                  <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button class="btn-ghost" title="Preview">
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Preview
+                </button>
+                <button class="btn-ghost" title="Duplicate">
+                  <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 5: ASOS -->
+          <tr>
+            <td>
+              <div class="template-name-cell">
+                <div class="template-icon pdf">PDF</div>
+                <div class="template-name-info">
+                  <div class="template-name">ASOS Supplier Quote</div>
+                  <div class="template-desc">ASOS supplier hub compatible format</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge badge-green">ASOS</span></td>
+            <td><span class="badge badge-blue">PDF</span></td>
+            <td>
+              <label class="toggle">
+                <input type="checkbox" />
+                <span class="toggle-slider"></span>
+              </label>
+            </td>
+            <td style="color:var(--text-secondary);font-size:12px;">Feb 18, 2026</td>
+            <td>
+              <div class="action-cell">
+                <button class="btn-ghost" title="Edit">
+                  <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button class="btn-ghost" title="Preview">
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Preview
+                </button>
+                <button class="btn-ghost" title="Duplicate">
+                  <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 6: Next Clothing -->
+          <tr>
+            <td>
+              <div class="template-name-cell">
+                <div class="template-icon excel">XLS</div>
+                <div class="template-name-info">
+                  <div class="template-name">Next Clothing Costing</div>
+                  <div class="template-desc">Next PLC buyer costing Excel workbook</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge" style="background:rgba(251,146,60,0.12);color:#FB923C;">Next</span></td>
+            <td><span class="badge badge-green">Excel</span></td>
+            <td>
+              <label class="toggle">
+                <input type="checkbox" />
+                <span class="toggle-slider"></span>
+              </label>
+            </td>
+            <td style="color:var(--text-secondary);font-size:12px;">Feb 10, 2026</td>
+            <td>
+              <div class="action-cell">
+                <button class="btn-ghost" title="Edit">
+                  <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button class="btn-ghost" title="Preview">
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Preview
+                </button>
+                <button class="btn-ghost" title="Duplicate">
+                  <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Row 7: Simplified CIF -->
+          <tr>
+            <td>
+              <div class="template-name-cell">
+                <div class="template-icon pdf">PDF</div>
+                <div class="template-name-info">
+                  <div class="template-name">Simplified CIF Quote</div>
+                  <div class="template-desc">Compact quote with CIF pricing and minimal breakdown</div>
+                </div>
+              </div>
+            </td>
+            <td><span class="badge badge-muted">Generic</span></td>
+            <td><span class="badge badge-blue">PDF</span></td>
+            <td>
+              <label class="toggle">
+                <input type="checkbox" />
+                <span class="toggle-slider"></span>
+              </label>
+            </td>
+            <td style="color:var(--text-secondary);font-size:12px;">Jan 28, 2026</td>
+            <td>
+              <div class="action-cell">
+                <button class="btn-ghost" title="Edit">
+                  <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  Edit
+                </button>
+                <button class="btn-ghost" title="Preview">
+                  <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Preview
+                </button>
+                <button class="btn-ghost" title="Duplicate">
+                  <svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Template Editor Section -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <div>
+          <h2 class="form-section-title">Template Editor</h2>
+          <p class="form-section-desc">Drag and drop sections to customize the layout of your quote template. Editing: <strong style="color:var(--aqua);">H&M CIQ Template</strong></p>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-secondary btn-sm">
+            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            Preview
+          </button>
+          <button class="btn btn-primary btn-sm">
+            <svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
+            Save Template
+          </button>
+        </div>
+      </div>
+
+      <div class="form-grid-2" style="margin-bottom:20px;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Template Name <span class="required">*</span></label>
+          <input type="text" class="form-input" value="H&M CIQ Template" />
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Assign to Buyer</label>
+          <select class="form-select">
+            <option value="">Select buyer (optional)</option>
+            <option value="hm" selected>H&M</option>
+            <option value="primark">Primark</option>
+            <option value="zara">Zara</option>
+            <option value="asos">ASOS</option>
+            <option value="next">Next Clothing</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Output Format <span class="required">*</span></label>
+          <select class="form-select">
+            <option value="pdf" selected>PDF Document</option>
+            <option value="excel">Excel Spreadsheet</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Currency Display</label>
+          <select class="form-select">
+            <option value="usd" selected>USD Only</option>
+            <option value="dual">Dual Currency (USD + Buyer Currency)</option>
+            <option value="buyer">Buyer Currency Only</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <label class="form-label" style="margin-bottom:10px;display:block;">Template Sections</label>
+        <span class="form-hint">Drag sections to reorder. Toggle visibility with the switch on the right.</span>
+      </div>
+
+      <div class="template-editor-sections">
+        <div class="editor-section-item">
+          <div class="drag-handle">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="8" y2="6.01"/><line x1="12" y1="6" x2="12" y2="6.01"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          </div>
+          <div class="section-info">
+            <div class="section-label">Factory Header & Letterhead</div>
+            <div class="section-desc">Factory name, logo, address, and contact information</div>
+          </div>
+          <div class="section-toggle">
+            <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="editor-section-item">
+          <div class="drag-handle">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="8" y2="6.01"/><line x1="12" y1="6" x2="12" y2="6.01"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          </div>
+          <div class="section-info">
+            <div class="section-label">Buyer & Quote Reference</div>
+            <div class="section-desc">Buyer name, quote number, version, date, and validity</div>
+          </div>
+          <div class="section-toggle">
+            <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="editor-section-item">
+          <div class="drag-handle">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="8" y2="6.01"/><line x1="12" y1="6" x2="12" y2="6.01"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          </div>
+          <div class="section-info">
+            <div class="section-label">Product Specifications</div>
+            <div class="section-desc">Style, fabric, GSM, composition, colorways, quantity, sizes</div>
+          </div>
+          <div class="section-toggle">
+            <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="editor-section-item">
+          <div class="drag-handle">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="8" y2="6.01"/><line x1="12" y1="6" x2="12" y2="6.01"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          </div>
+          <div class="section-info">
+            <div class="section-label">Cost Breakdown Table</div>
+            <div class="section-desc">Fabric, CMT, trims, washing, packing, overhead, freight line items</div>
+          </div>
+          <div class="section-toggle">
+            <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="editor-section-item">
+          <div class="drag-handle">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="8" y2="6.01"/><line x1="12" y1="6" x2="12" y2="6.01"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          </div>
+          <div class="section-info">
+            <div class="section-label">FOB / CIF Pricing Summary</div>
+            <div class="section-desc">Total cost, margin, FOB/CIF per unit and total with incoterm</div>
+          </div>
+          <div class="section-toggle">
+            <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="editor-section-item">
+          <div class="drag-handle">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="8" y2="6.01"/><line x1="12" y1="6" x2="12" y2="6.01"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          </div>
+          <div class="section-info">
+            <div class="section-label">Size Breakdown</div>
+            <div class="section-desc">Size-wise quantity distribution table</div>
+          </div>
+          <div class="section-toggle">
+            <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="editor-section-item">
+          <div class="drag-handle">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="8" y2="6.01"/><line x1="12" y1="6" x2="12" y2="6.01"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          </div>
+          <div class="section-info">
+            <div class="section-label">Delivery & Payment Terms</div>
+            <div class="section-desc">Delivery date, port, payment terms, and lead time</div>
+          </div>
+          <div class="section-toggle">
+            <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="editor-section-item">
+          <div class="drag-handle">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="8" y2="6.01"/><line x1="12" y1="6" x2="12" y2="6.01"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          </div>
+          <div class="section-info">
+            <div class="section-label">Certifications & Compliance</div>
+            <div class="section-desc">OEKO-TEX, GOTS, BSCI, SEDEX and other certifications</div>
+          </div>
+          <div class="section-toggle">
+            <label class="toggle"><input type="checkbox" /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+
+        <div class="editor-section-item">
+          <div class="drag-handle">
+            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="8" y2="6.01"/><line x1="12" y1="6" x2="12" y2="6.01"/><line x1="8" y1="10" x2="8" y2="10.01"/><line x1="12" y1="10" x2="12" y2="10.01"/><line x1="8" y1="14" x2="8" y2="14.01"/><line x1="12" y1="14" x2="12" y2="14.01"/><line x1="8" y1="18" x2="8" y2="18.01"/><line x1="12" y1="18" x2="12" y2="18.01"/></svg>
+          </div>
+          <div class="section-info">
+            <div class="section-label">Notes to Buyer</div>
+            <div class="section-desc">Custom notes, terms & conditions, and footer text</div>
+          </div>
+          <div class="section-toggle">
+            <label class="toggle"><input type="checkbox" checked /><span class="toggle-slider"></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Template Preview Section -->
+    <div class="form-section">
+      <div class="form-section-header">
+        <div>
+          <h2 class="form-section-title">Template Preview</h2>
+          <p class="form-section-desc">Live preview of the H&M CIQ Template output</p>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-secondary btn-sm">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Sample
+          </button>
+        </div>
+      </div>
+
+      <div class="template-preview">
+        <div class="tp-header">
+          <div>
+            <div class="tp-factory-name">NEXUS GARMENTS LTD.</div>
+            <div class="tp-factory-addr">Plot 45-46, BSCIC Industrial Area<br>Tongi, Gazipur-1710, Dhaka, Bangladesh<br>Phone: +880 2 9812345 | www.nexusgarments.com.bd</div>
+          </div>
+          <div>
+            <div class="tp-quote-title">QUOTATION</div>
+            <div class="tp-quote-ref">QT-202603-0042 (v1)<br>Date: March 7, 2026<br>Valid Until: March 22, 2026</div>
+          </div>
+        </div>
+
+        <div class="tp-section-title">Buyer Details</div>
+        <table>
+          <tr><td style="width:140px;font-weight:600;">Buyer</td><td>H&M Hennes & Mauritz AB</td></tr>
+          <tr><td style="font-weight:600;">Reference</td><td>RFQ-202603-0078</td></tr>
+          <tr><td style="font-weight:600;">Product</td><td>Men's Polo Shirt - Short Sleeve</td></tr>
+          <tr><td style="font-weight:600;">Style No.</td><td>HM-SS26-PLO-4421</td></tr>
+        </table>
+
+        <div class="tp-section-title">Product Specification</div>
+        <table>
+          <tr><td style="width:140px;font-weight:600;">Fabric</td><td>100% Cotton Pique, 220 GSM</td></tr>
+          <tr><td style="font-weight:600;">Quantity</td><td>50,000 pcs</td></tr>
+          <tr><td style="font-weight:600;">Colors</td><td>White, Navy, Black, Heather Grey</td></tr>
+          <tr><td style="font-weight:600;">Sizes</td><td>S(15%) / M(25%) / L(30%) / XL(20%) / XXL(10%)</td></tr>
+        </table>
+
+        <div class="tp-section-title">Cost Breakdown (USD)</div>
+        <table>
+          <thead>
+            <tr><th>Item</th><th style="text-align:right;">Per Unit</th><th style="text-align:right;">Total</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Fabric (220 GSM Pique Cotton)</td><td style="text-align:right;">$2.8500</td><td style="text-align:right;">$142,500.00</td></tr>
+            <tr><td>CMT (Polo Shirt - Medium)</td><td style="text-align:right;">$1.6500</td><td style="text-align:right;">$82,500.00</td></tr>
+            <tr><td>Trims & Accessories</td><td style="text-align:right;">$0.4200</td><td style="text-align:right;">$21,000.00</td></tr>
+            <tr><td>Washing (Normal)</td><td style="text-align:right;">$0.2500</td><td style="text-align:right;">$12,500.00</td></tr>
+            <tr><td>Embroidery (Logo)</td><td style="text-align:right;">$0.1800</td><td style="text-align:right;">$9,000.00</td></tr>
+            <tr><td>Packing</td><td style="text-align:right;">$0.1500</td><td style="text-align:right;">$7,500.00</td></tr>
+            <tr><td>Overhead (10%)</td><td style="text-align:right;">$0.1650</td><td style="text-align:right;">$8,250.00</td></tr>
+            <tr><td>Testing</td><td style="text-align:right;">$0.0400</td><td style="text-align:right;">$2,000.00</td></tr>
+            <tr><td>Commission (5%)</td><td style="text-align:right;">$0.2875</td><td style="text-align:right;">$14,375.00</td></tr>
+            <tr><td>Finance Cost (2%)</td><td style="text-align:right;">$0.1150</td><td style="text-align:right;">$5,750.00</td></tr>
+            <tr class="total-row"><td>FOB Chittagong</td><td style="text-align:right;"><strong>$7.1500</strong></td><td style="text-align:right;"><strong>$357,500.00</strong></td></tr>
+          </tbody>
+        </table>
+
+        <div class="tp-section-title">Terms</div>
+        <table>
+          <tr><td style="width:140px;font-weight:600;">Incoterm</td><td>FOB Chittagong</td></tr>
+          <tr><td style="font-weight:600;">Delivery</td><td>April 30, 2026</td></tr>
+          <tr><td style="font-weight:600;">Payment</td><td>60 days LC at sight</td></tr>
+          <tr><td style="font-weight:600;">Lead Time</td><td>45 days after order confirmation</td></tr>
+        </table>
+
+        <div class="tp-footer">
+          This quotation is valid for 15 days from the date of issue. Prices are subject to change based on material cost fluctuations.<br>
+          Generated by RFQX | Nexus Garments Ltd. | Confidential
+        </div>
+      </div>
+    </div>
+
+    <!-- Helpful tip -->
+    <div class="empty-template-hint">
+      <div class="hint-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      </div>
+      <div class="hint-text">
+        <strong>Tip:</strong> Each buyer can have a preferred template assigned from their profile page. When generating a quote, RFQX will automatically use the buyer's preferred template. You can also ask QUINN to switch templates during quote generation.
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- QUINN FAB -->
+<button class="quinn-fab" title="Ask QUINN">
+  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+</button>
+
+</body>
+</html>

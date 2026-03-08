@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RFQX — Settings / Team</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-primary: #0C1420;
+  --bg-secondary: #131E30;
+  --bg-tertiary: #1A2640;
+  --bg-card: #162032;
+  --bg-input: #0F1926;
+  --bg-hover: #1E2D45;
+  --bg-active: rgba(87, 172, 175, 0.1);
+  --border: #253550;
+  --border-focus: #57ACAF;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --aqua: #57ACAF;
+  --aqua-hover: #6BC0C3;
+  --aqua-dim: rgba(87, 172, 175, 0.15);
+  --yellow: #EAB308;
+  --yellow-dim: rgba(234, 179, 8, 0.12);
+  --green: #22C55E;
+  --green-dim: rgba(34, 197, 94, 0.12);
+  --red: #EF4444;
+  --red-dim: rgba(239, 68, 68, 0.1);
+  --orange: #F97316;
+  --orange-dim: rgba(249, 115, 22, 0.12);
+  --purple: #A855F7;
+  --purple-dim: rgba(168, 85, 247, 0.12);
+  --blue: #3B82F6;
+  --blue-dim: rgba(59, 130, 246, 0.12);
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --radius: 8px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 10px 25px rgba(0,0,0,0.5);
+  --transition: 150ms ease;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+}
+
+.sidebar-logo {
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-logo .logo-icon {
+  width: 32px;
+  height: 32px;
+  background: var(--aqua);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #0C1420;
+}
+
+.sidebar-logo .logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.sidebar-logo .logo-text span {
+  color: var(--aqua);
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-section { margin-bottom: 8px; }
+
+.nav-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  padding: 8px 12px 6px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all var(--transition);
+  cursor: pointer;
+  margin-bottom: 2px;
+}
+
+.nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background: var(--bg-active);
+  color: var(--aqua);
+}
+
+.nav-item .nav-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-item .nav-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--red);
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 1px 6px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.nav-spacer { flex: 1; }
+
+.sidebar-user {
+  padding: 16px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar-user .user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--aqua), #3B82F6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.sidebar-user .user-info { flex: 1; min-width: 0; }
+
+.sidebar-user .user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-user .user-role {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* Main content */
+.main {
+  margin-left: 250px;
+  flex: 1;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Top bar */
+.topbar {
+  height: 56px;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.breadcrumb a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.breadcrumb a:hover { color: var(--aqua); }
+
+.breadcrumb .separator { color: var(--text-muted); font-size: 11px; }
+
+.breadcrumb .current { color: var(--text-primary); font-weight: 500; }
+
+.topbar-spacer { flex: 1; }
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font);
+}
+
+.search-trigger:hover {
+  border-color: var(--text-muted);
+  color: var(--text-secondary);
+}
+
+.search-trigger kbd {
+  font-family: var(--font);
+  font-size: 11px;
+  background: var(--bg-primary);
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+}
+
+.icon-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon-btn .notif-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background: var(--red);
+  border-radius: 50%;
+  border: 2px solid var(--bg-secondary);
+}
+
+/* Page content */
+.page-content {
+  flex: 1;
+  padding: 24px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.page-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.3px;
+}
+
+.page-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Settings Tabs */
+.settings-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+  gap: 0;
+  overflow-x: auto;
+}
+
+.settings-tab {
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.settings-tab:hover {
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.02);
+}
+
+.settings-tab.active {
+  color: var(--aqua);
+  border-bottom-color: var(--aqua);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font);
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--aqua);
+  color: #0C1420;
+  border-color: var(--aqua);
+}
+
+.btn-primary:hover {
+  background: var(--aqua-hover);
+  border-color: var(--aqua-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(87, 172, 175, 0.3);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border-color: var(--text-muted);
+}
+
+.btn-danger {
+  background: transparent;
+  color: var(--red);
+  border-color: rgba(239,68,68,0.3);
+}
+
+.btn-danger:hover {
+  background: var(--red-dim);
+  border-color: var(--red);
+}
+
+.btn-sm {
+  padding: 5px 12px;
+  font-size: 12px;
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Form section */
+.form-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.form-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.form-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-section-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Stats cards row */
+.team-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stat-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-icon svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.stat-icon.aqua { background: var(--aqua-dim); color: var(--aqua); }
+.stat-icon.green { background: var(--green-dim); color: var(--green); }
+.stat-icon.yellow { background: var(--yellow-dim); color: var(--yellow); }
+.stat-icon.purple { background: var(--purple-dim); color: var(--purple); }
+
+.stat-content { flex: 1; }
+
+.stat-value {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Team table */
+.team-table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+tbody tr {
+  transition: background var(--transition);
+}
+
+tbody tr:hover {
+  background: var(--bg-hover);
+}
+
+tbody td {
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(37, 53, 80, 0.5);
+  vertical-align: middle;
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* User cell */
+.user-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-cell .avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 12px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.user-cell .avatar.av-1 { background: linear-gradient(135deg, var(--aqua), #3B82F6); }
+.user-cell .avatar.av-2 { background: linear-gradient(135deg, #A855F7, #6366F1); }
+.user-cell .avatar.av-3 { background: linear-gradient(135deg, #F97316, #EAB308); }
+.user-cell .avatar.av-4 { background: linear-gradient(135deg, #22C55E, #14B8A6); }
+.user-cell .avatar.av-5 { background: linear-gradient(135deg, #EC4899, #F43F5E); }
+.user-cell .avatar.av-6 { background: linear-gradient(135deg, #3B82F6, #06B6D4); }
+.user-cell .avatar.av-7 { background: linear-gradient(135deg, #8B5CF6, #A855F7); }
+
+.user-cell .user-details { min-width: 0; }
+
+.user-cell .user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-cell .user-email {
+  font-size: 12px;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-owner {
+  background: var(--aqua-dim);
+  color: var(--aqua);
+}
+
+.badge-admin {
+  background: var(--purple-dim);
+  color: var(--purple);
+}
+
+.badge-quotation-manager {
+  background: var(--blue-dim);
+  color: var(--blue);
+}
+
+.badge-merchandiser {
+  background: var(--orange-dim);
+  color: var(--orange);
+}
+
+.badge-commercial {
+  background: var(--yellow-dim);
+  color: var(--yellow);
+}
+
+.badge-viewer {
+  background: rgba(100, 116, 139, 0.15);
+  color: var(--text-muted);
+}
+
+.badge-active {
+  background: var(--green-dim);
+  color: var(--green);
+}
+
+.badge-invited {
+  background: var(--yellow-dim);
+  color: var(--yellow);
+}
+
+.badge-deactivated {
+  background: rgba(100, 116, 139, 0.12);
+  color: var(--text-muted);
+}
+
+/* MFA indicator */
+.mfa-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+}
+
+.mfa-status .mfa-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.mfa-status .mfa-dot.enabled { background: var(--green); }
+.mfa-status .mfa-dot.disabled { background: var(--text-muted); }
+.mfa-status .mfa-dot.required { background: var(--yellow); }
+
+.mfa-status .mfa-label { color: var(--text-secondary); }
+.mfa-status .mfa-required { color: var(--yellow); font-weight: 500; font-size: 10px; }
+
+/* Actions dropdown */
+.actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.action-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.action-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.action-btn:hover.edit { color: var(--aqua); }
+.action-btn:hover.deactivate { color: var(--yellow); }
+.action-btn:hover.remove { color: var(--red); }
+
+.action-btn svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Last login */
+.last-login {
+  font-size: 12px;
+}
+
+.last-login .login-time { color: var(--text-secondary); }
+.last-login .login-ago { color: var(--text-muted); display: block; font-size: 11px; }
+
+/* Invite modal overlay */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 500;
+}
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  width: 480px;
+  max-width: 95vw;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition);
+}
+
+.modal-close:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.modal-close svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-group:last-child { margin-bottom: 0; }
+
+.form-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.form-label .required {
+  color: var(--red);
+  margin-left: 2px;
+}
+
+.form-input,
+.form-select {
+  padding: 9px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: var(--font);
+  transition: all var(--transition);
+  outline: none;
+}
+
+.form-input:hover,
+.form-select:hover {
+  border-color: #3A5070;
+}
+
+.form-input:focus,
+.form-select:focus {
+  border-color: var(--aqua);
+  box-shadow: 0 0 0 3px var(--aqua-dim);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2364748B' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.form-select option {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.form-hint {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+/* Plan limit bar */
+.plan-limit {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 20px;
+}
+
+.plan-limit-info {
+  flex: 1;
+}
+
+.plan-limit-text {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.plan-limit-text strong {
+  color: var(--text-primary);
+}
+
+.plan-limit-bar {
+  width: 200px;
+  height: 6px;
+  background: var(--bg-primary);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.plan-limit-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.plan-limit-bar-fill.ok { background: var(--aqua); }
+.plan-limit-bar-fill.warn { background: var(--yellow); }
+.plan-limit-bar-fill.full { background: var(--red); }
+
+.plan-badge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--yellow-dim);
+  color: var(--yellow);
+}
+
+/* QUINN FAB */
+.quinn-fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--aqua), #3B9DA0);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(87, 172, 175, 0.4);
+  transition: all var(--transition);
+  z-index: 200;
+}
+
+.quinn-fab:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 24px rgba(87, 172, 175, 0.5);
+}
+
+.quinn-fab svg {
+  width: 24px;
+  height: 24px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* fabricXai brand tag */
+.brand-tag {
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+}
+
+.brand-tag .brand-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--yellow);
+  border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 1279px) {
+  .sidebar { width: 64px; }
+  .sidebar-logo .logo-text,
+  .nav-item span,
+  .nav-section-label,
+  .sidebar-user .user-info,
+  .nav-badge,
+  .brand-tag span { display: none; }
+  .sidebar-logo { padding: 16px; justify-content: center; }
+  .sidebar-nav { padding: 8px; }
+  .nav-item { justify-content: center; padding: 10px; }
+  .sidebar-user { justify-content: center; padding: 12px; }
+  .brand-tag { justify-content: center; }
+  .main { margin-left: 64px; }
+  .team-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main { margin-left: 0; }
+  .team-stats { grid-template-columns: 1fr; }
+  .settings-tabs { gap: 0; }
+  .settings-tab { padding: 10px 12px; font-size: 12px; }
+  .page-content { padding: 16px; }
+  .topbar { padding: 0 16px; }
+  .search-trigger kbd { display: none; }
+  .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .plan-limit { flex-direction: column; align-items: flex-start; gap: 8px; }
+  .plan-limit-bar { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">R</div>
+    <div class="logo-text">RFQ<span>X</span></div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <div class="nav-section-label">Main</div>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+        <span>Dashboard</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg></span>
+        <span>RFQ Inbox</span>
+        <span class="nav-badge">7</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10,9 9,9 8,9"/></svg></span>
+        <span>Quote Builder</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></span>
+        <span>Cost Library</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></span>
+        <span>Buyers</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+        <span>Analytics</span>
+      </a>
+    </div>
+
+    <div class="nav-spacer"></div>
+
+    <div class="nav-section">
+      <a href="#" class="nav-item active">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.32 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></span>
+        <span>Settings</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+        <span>Help</span>
+      </a>
+    </div>
+  </nav>
+
+  <div class="brand-tag">
+    <span class="brand-dot"></span>
+    <span>fabricXai Platform</span>
+  </div>
+
+  <div class="sidebar-user">
+    <div class="user-avatar">RA</div>
+    <div class="user-info">
+      <div class="user-name">Rahim Ahmed</div>
+      <div class="user-role">Owner</div>
+    </div>
+  </div>
+</aside>
+
+<!-- Main Content -->
+<main class="main">
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="breadcrumb">
+      <a href="#">Settings</a>
+      <span class="separator">/</span>
+      <span class="current">Team</span>
+    </div>
+
+    <div class="topbar-spacer"></div>
+
+    <div class="topbar-actions">
+      <button class="search-trigger">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search...
+        <kbd>Ctrl+K</kbd>
+      </button>
+
+      <button class="icon-btn">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        <span class="notif-dot"></span>
+      </button>
+
+      <button class="icon-btn" title="QUINN Copilot">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="page-content">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Settings</h1>
+        <p class="page-subtitle">Manage your factory profile, team, integrations, and preferences</p>
+      </div>
+      <button class="btn btn-primary" onclick="document.getElementById('invite-modal').style.display='flex'">
+        <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+        Invite User
+      </button>
+    </div>
+
+    <!-- Settings Tabs -->
+    <div class="settings-tabs">
+      <a href="#" class="settings-tab">Factory Profile</a>
+      <a href="#" class="settings-tab active">Team</a>
+      <a href="#" class="settings-tab">Integrations</a>
+      <a href="#" class="settings-tab">Templates</a>
+      <a href="#" class="settings-tab">Routing Rules</a>
+      <a href="#" class="settings-tab">Notifications</a>
+      <a href="#" class="settings-tab">Billing</a>
+      <a href="#" class="settings-tab">Audit Log</a>
+    </div>
+
+    <!-- Plan limit bar -->
+    <div class="plan-limit">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      <div class="plan-limit-info">
+        <div class="plan-limit-text"><strong>6 of 10</strong> team seats used</div>
+      </div>
+      <div class="plan-limit-bar">
+        <div class="plan-limit-bar-fill ok" style="width: 60%;"></div>
+      </div>
+      <span class="plan-badge">Growth Plan</span>
+    </div>
+
+    <!-- Team Stats -->
+    <div class="team-stats">
+      <div class="stat-card">
+        <div class="stat-icon aqua">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">6</div>
+          <div class="stat-label">Total Members</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green">
+          <svg viewBox="0 0 24 24"><polyline points="20,6 9,17 4,12"/></svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">5</div>
+          <div class="stat-label">Active</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon yellow">
+          <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">1</div>
+          <div class="stat-label">Pending Invite</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon purple">
+          <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">3</div>
+          <div class="stat-label">MFA Enabled</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Members Table -->
+    <div class="form-section" style="padding: 0; overflow: hidden;">
+      <div class="form-section-header" style="padding: 20px 24px; margin-bottom: 0;">
+        <div>
+          <h2 class="form-section-title">Team Members</h2>
+          <p class="form-section-desc">Manage team access, roles, and multi-factor authentication</p>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn btn-secondary btn-sm">
+            <svg viewBox="0 0 24 24" width="14" height="14"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+        </div>
+      </div>
+
+      <div class="team-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Member</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>MFA</th>
+              <th>Last Login</th>
+              <th style="text-align:right;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Row 1: Owner -->
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar av-1">RA</div>
+                  <div class="user-details">
+                    <div class="user-name">Rahim Ahmed</div>
+                    <div class="user-email">rahim@nexusgarments.com.bd</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-owner">Owner</span></td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>
+                <div class="mfa-status">
+                  <span class="mfa-dot enabled"></span>
+                  <span class="mfa-label">Enabled</span>
+                </div>
+              </td>
+              <td>
+                <div class="last-login">
+                  <span class="login-time">Mar 7, 2026</span>
+                  <span class="login-ago">2 hours ago</span>
+                </div>
+              </td>
+              <td>
+                <div class="actions-cell" style="justify-content:flex-end;">
+                  <button class="action-btn edit" title="Edit Role">
+                    <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 2: Admin -->
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar av-2">SK</div>
+                  <div class="user-details">
+                    <div class="user-name">Sarah Khan</div>
+                    <div class="user-email">sarah.khan@nexusgarments.com.bd</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-admin">Admin</span></td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>
+                <div class="mfa-status">
+                  <span class="mfa-dot enabled"></span>
+                  <span class="mfa-label">Enabled</span>
+                </div>
+              </td>
+              <td>
+                <div class="last-login">
+                  <span class="login-time">Mar 7, 2026</span>
+                  <span class="login-ago">45 min ago</span>
+                </div>
+              </td>
+              <td>
+                <div class="actions-cell" style="justify-content:flex-end;">
+                  <button class="action-btn edit" title="Edit Role">
+                    <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </button>
+                  <button class="action-btn deactivate" title="Deactivate">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                  </button>
+                  <button class="action-btn remove" title="Remove">
+                    <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 3: Quotation Manager -->
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar av-3">TI</div>
+                  <div class="user-details">
+                    <div class="user-name">Tanvir Islam</div>
+                    <div class="user-email">tanvir@nexusgarments.com.bd</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-quotation-manager">Quotation Manager</span></td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>
+                <div class="mfa-status">
+                  <span class="mfa-dot enabled"></span>
+                  <span class="mfa-label">Enabled</span>
+                </div>
+              </td>
+              <td>
+                <div class="last-login">
+                  <span class="login-time">Mar 6, 2026</span>
+                  <span class="login-ago">Yesterday</span>
+                </div>
+              </td>
+              <td>
+                <div class="actions-cell" style="justify-content:flex-end;">
+                  <button class="action-btn edit" title="Edit Role">
+                    <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </button>
+                  <button class="action-btn deactivate" title="Deactivate">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                  </button>
+                  <button class="action-btn remove" title="Remove">
+                    <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 4: Merchandiser -->
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar av-4">NR</div>
+                  <div class="user-details">
+                    <div class="user-name">Nusrat Rahman</div>
+                    <div class="user-email">nusrat@nexusgarments.com.bd</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-merchandiser">Merchandiser</span></td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>
+                <div class="mfa-status">
+                  <span class="mfa-dot disabled"></span>
+                  <span class="mfa-label">Disabled</span>
+                </div>
+              </td>
+              <td>
+                <div class="last-login">
+                  <span class="login-time">Mar 5, 2026</span>
+                  <span class="login-ago">2 days ago</span>
+                </div>
+              </td>
+              <td>
+                <div class="actions-cell" style="justify-content:flex-end;">
+                  <button class="action-btn edit" title="Edit Role">
+                    <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </button>
+                  <button class="action-btn deactivate" title="Deactivate">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                  </button>
+                  <button class="action-btn remove" title="Remove">
+                    <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 5: Commercial Executive -->
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar av-5">FA</div>
+                  <div class="user-details">
+                    <div class="user-name">Farhan Ali</div>
+                    <div class="user-email">farhan@nexusgarments.com.bd</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-commercial">Commercial Exec</span></td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>
+                <div class="mfa-status">
+                  <span class="mfa-dot disabled"></span>
+                  <span class="mfa-label">Disabled</span>
+                </div>
+              </td>
+              <td>
+                <div class="last-login">
+                  <span class="login-time">Mar 7, 2026</span>
+                  <span class="login-ago">5 hours ago</span>
+                </div>
+              </td>
+              <td>
+                <div class="actions-cell" style="justify-content:flex-end;">
+                  <button class="action-btn edit" title="Edit Role">
+                    <svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  </button>
+                  <button class="action-btn deactivate" title="Deactivate">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                  </button>
+                  <button class="action-btn remove" title="Remove">
+                    <svg viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 6: Invited (Viewer) -->
+            <tr>
+              <td>
+                <div class="user-cell">
+                  <div class="avatar av-6">MH</div>
+                  <div class="user-details">
+                    <div class="user-name">Masud Hossain</div>
+                    <div class="user-email">masud.hossain@nexusgarments.com.bd</div>
+                  </div>
+                </div>
+              </td>
+              <td><span class="badge badge-viewer">Viewer</span></td>
+              <td><span class="badge badge-invited">Invited</span></td>
+              <td>
+                <div class="mfa-status">
+                  <span class="mfa-dot disabled"></span>
+                  <span class="mfa-label" style="color:var(--text-muted);">Pending</span>
+                </div>
+              </td>
+              <td>
+                <div class="last-login">
+                  <span class="login-time" style="color:var(--text-muted);">&mdash;</span>
+                  <span class="login-ago">Invite sent Mar 5</span>
+                </div>
+              </td>
+              <td>
+                <div class="actions-cell" style="justify-content:flex-end;">
+                  <button class="action-btn edit" title="Resend Invite" style="color:var(--aqua);">
+                    <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  </button>
+                  <button class="action-btn remove" title="Cancel Invite">
+                    <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Roles & Permissions Reference -->
+    <div class="form-section">
+      <div class="form-section-header" style="margin-bottom:16px;">
+        <div>
+          <h2 class="form-section-title">Roles & Permissions</h2>
+          <p class="form-section-desc">Reference guide for what each role can access</p>
+        </div>
+      </div>
+
+      <div class="team-table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Permission</th>
+              <th style="text-align:center;">Owner</th>
+              <th style="text-align:center;">Admin</th>
+              <th style="text-align:center;">Quotation Mgr</th>
+              <th style="text-align:center;">Merchandiser</th>
+              <th style="text-align:center;">Commercial Exec</th>
+              <th style="text-align:center;">Viewer</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="color:var(--text-primary);font-weight:500;">View Dashboard & Analytics</td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--text-primary);font-weight:500;">View & Manage RFQs</td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--text-primary);font-weight:500;">Build & Edit Quotes</td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--text-primary);font-weight:500;">Approve & Send Quotes</td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--text-primary);font-weight:500;">Manage Cost Library</td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--text-primary);font-weight:500;">Manage Team & Settings</td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+            </tr>
+            <tr>
+              <td style="color:var(--text-primary);font-weight:500;">Billing & Plan Management</td>
+              <td style="text-align:center;"><span style="color:var(--green);">&#10003;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+              <td style="text-align:center;"><span style="color:var(--text-muted);">&mdash;</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="margin-top: 14px; padding: 10px 14px; background: var(--yellow-dim); border: 1px solid rgba(234,179,8,0.2); border-radius: var(--radius-sm); display: flex; align-items: center; gap: 10px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span style="font-size: 12px; color: var(--yellow);">MFA is required for Owner and Admin roles. Accounts without MFA enabled will be prompted to set it up on next login.</span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Invite User Modal -->
+<div class="modal-overlay" id="invite-modal" style="display:none;" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title">Invite Team Member</h3>
+      <button class="modal-close" onclick="document.getElementById('invite-modal').style.display='none'">
+        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Email Address <span class="required">*</span></label>
+        <input type="email" class="form-input" placeholder="colleague@nexusgarments.com.bd" />
+        <span class="form-hint">An invitation link will be sent to this email</span>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" placeholder="Enter team member's name" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Role <span class="required">*</span></label>
+        <select class="form-select">
+          <option value="" disabled selected>Select a role...</option>
+          <option value="admin">Admin</option>
+          <option value="quotation_manager">Quotation Manager</option>
+          <option value="merchandiser">Merchandiser</option>
+          <option value="commercial_executive">Commercial Executive</option>
+          <option value="viewer">Viewer</option>
+        </select>
+        <span class="form-hint">Determines what the user can access. You can change this later.</span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="document.getElementById('invite-modal').style.display='none'">Cancel</button>
+      <button class="btn btn-primary">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Send Invite
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- QUINN FAB -->
+<button class="quinn-fab" title="Ask QUINN">
+  <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+</button>
+
+</body>
+</html>

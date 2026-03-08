@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RFQX — RFQ Inbox Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg-deepest: #0C1420;
+  --bg-deep: #131E30;
+  --bg-mid: #1A2640;
+  --bg-card: #1E2D45;
+  --bg-card-hover: #243352;
+  --bg-surface: #22334D;
+  --bg-glass: rgba(19, 30, 48, 0.85);
+  --border: rgba(87, 172, 175, 0.12);
+  --border-hover: rgba(87, 172, 175, 0.3);
+  --aqua: #57ACAF;
+  --aqua-dim: rgba(87, 172, 175, 0.15);
+  --aqua-glow: rgba(87, 172, 175, 0.25);
+  --yellow: #EAB308;
+  --yellow-dim: rgba(234, 179, 8, 0.12);
+  --green: #22C55E;
+  --green-dim: rgba(34, 197, 94, 0.15);
+  --red: #EF4444;
+  --red-dim: rgba(239, 68, 68, 0.15);
+  --orange: #F97316;
+  --orange-dim: rgba(249, 115, 22, 0.15);
+  --purple: #A855F7;
+  --purple-dim: rgba(168, 85, 247, 0.15);
+  --blue: #3B82F6;
+  --blue-dim: rgba(59, 130, 246, 0.15);
+  --amber: #F59E0B;
+  --amber-dim: rgba(245, 158, 11, 0.15);
+  --gray: #64748B;
+  --gray-dim: rgba(100, 116, 139, 0.15);
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --font-heading: 'Sora', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
+  --transition: 200ms ease;
+  --sidebar-width: 240px;
+  --sidebar-collapsed: 64px;
+  --topbar-height: 56px;
+}
+
+html { font-size: 14px; }
+body {
+  font-family: var(--font-body);
+  background: var(--bg-deepest);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ===== LAYOUT SHELL ===== */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: var(--sidebar-width);
+  background: var(--bg-deep);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 100;
+  transition: width var(--transition);
+}
+
+.sidebar-header {
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--aqua), #3d8b8e);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 14px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.logo-text {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 18px;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.logo-text span { color: var(--aqua); }
+
+.sidebar-collapse-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.sidebar-collapse-btn:hover { color: var(--text-primary); background: var(--aqua-dim); }
+
+.sidebar-nav {
+  flex: 1;
+  padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+}
+
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  padding: 16px 12px 6px;
+  font-family: var(--font-mono);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all var(--transition);
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  background: var(--aqua-dim);
+  color: var(--text-primary);
+}
+
+.nav-item.active {
+  background: var(--aqua-dim);
+  color: var(--aqua);
+  font-weight: 600;
+}
+
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 20px;
+  background: var(--aqua);
+  border-radius: 0 3px 3px 0;
+}
+
+.nav-icon {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nav-badge {
+  margin-left: auto;
+  background: var(--aqua);
+  color: var(--bg-deepest);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 10px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  border-top: 1px solid var(--border);
+  padding: 12px;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.user-card:hover { background: var(--aqua-dim); }
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--aqua), var(--purple));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 12px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.user-info { flex: 1; min-width: 0; }
+.user-name { font-size: 13px; font-weight: 600; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.user-role { font-size: 11px; color: var(--text-muted); font-family: var(--font-mono); }
+
+/* ===== MAIN CONTENT ===== */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  height: var(--topbar-height);
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  gap: 16px;
+  flex-shrink: 0;
+  z-index: 50;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.breadcrumb-item { color: var(--text-muted); text-decoration: none; }
+.breadcrumb-item:hover { color: var(--text-secondary); }
+.breadcrumb-sep { color: var(--text-muted); font-size: 11px; }
+.breadcrumb-current { color: var(--text-primary); font-weight: 600; }
+
+.topbar-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-mid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  margin-left: auto;
+  cursor: pointer;
+  transition: border-color var(--transition);
+  min-width: 200px;
+}
+.topbar-search:hover { border-color: var(--border-hover); }
+.topbar-search svg { color: var(--text-muted); }
+.topbar-search-text { color: var(--text-muted); font-size: 13px; flex: 1; }
+.topbar-search-kbd {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  background: var(--bg-deep);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.topbar-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius);
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  transition: all var(--transition);
+}
+.topbar-btn:hover { background: var(--aqua-dim); color: var(--text-primary); }
+
+.notification-dot {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background: var(--red);
+  border-radius: 50%;
+  border: 2px solid var(--bg-deep);
+}
+
+.quinn-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  border: 1px solid var(--aqua);
+  background: var(--aqua-dim);
+  color: var(--aqua);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font-heading);
+}
+.quinn-toggle:hover { background: rgba(87, 172, 175, 0.25); }
+.quinn-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--aqua);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ===== PAGE HEADER ===== */
+.page-header {
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-deep);
+}
+
+.page-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--text-primary);
+}
+
+.page-title-count {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: var(--bg-mid);
+  padding: 2px 10px;
+  border-radius: 10px;
+}
+
+.page-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition);
+  border: 1px solid transparent;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: var(--aqua);
+  color: var(--bg-deepest);
+  border-color: var(--aqua);
+}
+.btn-primary:hover {
+  background: #4a9a9d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(87, 172, 175, 0.3);
+}
+
+.btn-secondary {
+  background: var(--bg-mid);
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+.btn-secondary:hover {
+  background: var(--bg-surface);
+  border-color: var(--border-hover);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: transparent;
+  padding: 6px 10px;
+}
+.btn-ghost:hover { background: var(--aqua-dim); color: var(--text-primary); }
+
+.btn-icon {
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  justify-content: center;
+}
+
+/* ===== VIEW TOGGLE ===== */
+.view-toggle {
+  display: flex;
+  background: var(--bg-mid);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.view-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition);
+  font-family: var(--font-body);
+}
+.view-toggle-btn:hover { color: var(--text-primary); }
+.view-toggle-btn.active {
+  background: var(--aqua-dim);
+  color: var(--aqua);
+  font-weight: 600;
+}
+
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border);
+  overflow-x: auto;
+}
+
+.filter-select {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-mid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.filter-select:hover { border-color: var(--border-hover); color: var(--text-primary); }
+
+.filter-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--bg-mid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  min-width: 180px;
+}
+.filter-search input {
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-family: var(--font-body);
+  width: 100%;
+}
+.filter-search input::placeholder { color: var(--text-muted); }
+
+.filter-active {
+  border-color: var(--aqua) !important;
+  color: var(--aqua) !important;
+  background: var(--aqua-dim) !important;
+}
+
+/* ===== KANBAN BOARD ===== */
+.board-container {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 20px 24px;
+  background: var(--bg-deepest);
+}
+
+.board {
+  display: flex;
+  gap: 16px;
+  height: 100%;
+  min-width: max-content;
+}
+
+.board-column {
+  width: 300px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-deep);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.column-header {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.column-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.column-title {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.column-count {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--bg-mid);
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-left: auto;
+}
+
+.column-value {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.column-cards {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.column-cards::-webkit-scrollbar { width: 4px; }
+.column-cards::-webkit-scrollbar-track { background: transparent; }
+.column-cards::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ===== KANBAN CARD ===== */
+.rfq-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  cursor: pointer;
+  transition: all var(--transition);
+  position: relative;
+}
+
+.rfq-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.rfq-card:active {
+  transform: translateY(0);
+}
+
+.rfq-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.rfq-card-number {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--aqua);
+}
+
+.priority-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.priority-1 { background: var(--red-dim); color: var(--red); }
+.priority-2 { background: var(--orange-dim); color: var(--orange); }
+.priority-3 { background: var(--amber-dim); color: var(--amber); }
+.priority-4 { background: var(--blue-dim); color: var(--blue); }
+.priority-5 { background: var(--gray-dim); color: var(--gray); }
+
+.rfq-card-buyer {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.buyer-tier {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--yellow);
+}
+
+.rfq-card-product {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.rfq-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.rfq-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.rfq-meta-item svg { width: 12px; height: 12px; flex-shrink: 0; }
+.rfq-meta-value { font-family: var(--font-mono); font-size: 11px; color: var(--text-secondary); }
+
+.rfq-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+
+.rfq-deadline {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.deadline-green { color: var(--green); }
+.deadline-amber { color: var(--amber); }
+.deadline-red { color: var(--red); }
+
+.rfq-source-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+}
+
+.source-email { background: var(--blue-dim); color: var(--blue); }
+.source-portal { background: var(--purple-dim); color: var(--purple); }
+.source-whatsapp { background: var(--green-dim); color: var(--green); }
+.source-upload { background: var(--amber-dim); color: var(--amber); }
+
+.rfq-card-assignee {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  font-size: 9px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.avatar-1 { background: linear-gradient(135deg, #6366F1, #8B5CF6); }
+.avatar-2 { background: linear-gradient(135deg, #EC4899, #F43F5E); }
+.avatar-3 { background: linear-gradient(135deg, #14B8A6, #06B6D4); }
+.avatar-4 { background: linear-gradient(135deg, #F97316, #EAB308); }
+.avatar-5 { background: linear-gradient(135deg, #3B82F6, #6366F1); }
+
+.rfq-card-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.rfq-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--bg-mid);
+  color: var(--text-muted);
+}
+
+.confidence-bar {
+  height: 3px;
+  background: var(--bg-mid);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.confidence-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+.confidence-high { background: var(--green); }
+.confidence-med { background: var(--amber); }
+.confidence-low { background: var(--red); }
+
+/* ===== COLUMN ADD BUTTON ===== */
+.column-add {
+  padding: 8px;
+  flex-shrink: 0;
+  border-top: 1px solid var(--border);
+}
+
+.column-add-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.column-add-btn:hover {
+  border-color: var(--aqua);
+  color: var(--aqua);
+  background: var(--aqua-dim);
+}
+
+/* ===== QUINN CHAT PANEL ===== */
+.quinn-panel {
+  width: 380px;
+  background: var(--bg-deep);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  z-index: 90;
+}
+
+.quinn-header {
+  height: var(--topbar-height);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.quinn-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--aqua), #3d8b8e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 10px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.quinn-title {
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--aqua);
+}
+
+.quinn-status {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.quinn-status-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--green);
+  border-radius: 50%;
+}
+
+.quinn-header-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 4px;
+}
+
+.quinn-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.quinn-messages::-webkit-scrollbar { width: 4px; }
+.quinn-messages::-webkit-scrollbar-track { background: transparent; }
+.quinn-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.quinn-msg {
+  display: flex;
+  gap: 10px;
+  max-width: 100%;
+}
+
+.quinn-msg-bot { align-self: flex-start; }
+.quinn-msg-user { align-self: flex-end; flex-direction: row-reverse; }
+
+.quinn-msg-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.quinn-msg-bot .quinn-msg-avatar { background: linear-gradient(135deg, var(--aqua), #3d8b8e); }
+.quinn-msg-user .quinn-msg-avatar { background: linear-gradient(135deg, #6366F1, #8B5CF6); }
+
+.quinn-msg-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.quinn-msg-bubble {
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.quinn-msg-bot .quinn-msg-bubble {
+  background: var(--bg-mid);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-top-left-radius: 4px;
+}
+
+.quinn-msg-user .quinn-msg-bubble {
+  background: var(--aqua-dim);
+  border: 1px solid rgba(87, 172, 175, 0.2);
+  color: var(--text-primary);
+  border-top-right-radius: 4px;
+}
+
+.quinn-msg-time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+.quinn-msg-user .quinn-msg-time { text-align: right; }
+
+.quinn-tool-chips {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.quinn-tool-chip {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--aqua-dim);
+  color: var(--aqua);
+  border: 1px solid rgba(87, 172, 175, 0.2);
+}
+
+.quinn-action-btns {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.quinn-action-btn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--aqua);
+  background: var(--aqua-dim);
+  color: var(--aqua);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.quinn-action-btn:hover { background: rgba(87, 172, 175, 0.3); }
+
+.quinn-typing {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px;
+}
+
+.quinn-typing-dots {
+  display: flex;
+  gap: 3px;
+}
+
+.quinn-typing-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--aqua);
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite;
+}
+.quinn-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.quinn-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+
+.quinn-input-area {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.quinn-quick-actions {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.quinn-quick-btn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: var(--bg-mid);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+.quinn-quick-btn:hover { border-color: var(--aqua); color: var(--aqua); }
+
+.quinn-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-mid);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  transition: border-color var(--transition);
+}
+.quinn-input-wrap:focus-within { border-color: var(--aqua); }
+
+.quinn-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: var(--font-body);
+}
+.quinn-input::placeholder { color: var(--text-muted); }
+
+.quinn-send-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--aqua);
+  border: none;
+  color: var(--bg-deepest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition);
+  flex-shrink: 0;
+}
+.quinn-send-btn:hover { background: #4a9a9d; transform: scale(1.05); }
+
+/* ===== STATUS COLORS ===== */
+.status-new { background: var(--blue-dim); color: var(--blue); }
+.status-extracting { background: var(--purple-dim); color: var(--purple); }
+.status-costing { background: var(--amber-dim); color: var(--amber); }
+.status-review { background: var(--orange-dim); color: var(--orange); }
+.status-sent { background: var(--aqua-dim); color: var(--aqua); }
+.status-followed_up { background: var(--yellow-dim); color: var(--yellow); }
+.status-won { background: var(--green-dim); color: var(--green); }
+.status-lost { background: var(--red-dim); color: var(--red); }
+
+.dot-new { background: var(--blue); }
+.dot-extracting { background: var(--purple); }
+.dot-costing { background: var(--amber); }
+.dot-review { background: var(--orange); }
+.dot-sent { background: var(--aqua); }
+.dot-followed_up { background: var(--yellow); }
+
+/* ===== GLOW ANIMATION ON ACTIVE COLUMN ===== */
+.board-column.column-active {
+  border-color: var(--aqua);
+  box-shadow: 0 0 20px var(--aqua-glow), inset 0 1px 0 rgba(87, 172, 175, 0.1);
+}
+
+.board-column.column-active .column-header {
+  background: var(--aqua-dim);
+}
+
+/* ===== DRAG GHOST ===== */
+.rfq-card.dragging {
+  opacity: 0.5;
+  transform: rotate(2deg);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1440px) {
+  .board-column { width: 270px; min-width: 270px; }
+  .quinn-panel { width: 340px; }
+}
+
+@media (max-width: 1024px) {
+  .sidebar { width: var(--sidebar-collapsed); }
+  .sidebar .logo-text,
+  .sidebar .nav-item span,
+  .sidebar .nav-badge,
+  .sidebar .nav-section-label,
+  .sidebar .user-info,
+  .sidebar .sidebar-collapse-btn { display: none; }
+  .sidebar .nav-item { justify-content: center; padding: 10px; }
+  .sidebar .nav-item.active::before { display: none; }
+  .sidebar .user-card { justify-content: center; }
+  .quinn-panel { display: none; }
+  .board-column { width: 250px; min-width: 250px; }
+}
+
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .topbar-search { display: none; }
+  .filter-bar { padding: 8px 12px; }
+  .board-container { padding: 12px; }
+  .board { gap: 10px; }
+  .board-column { width: 240px; min-width: 240px; }
+  .quinn-panel { display: none; }
+  .page-header { padding: 12px 16px; }
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+</style>
+</head>
+<body>
+<div class="app-layout">
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <a href="#" class="sidebar-logo">
+        <div class="logo-icon">RX</div>
+        <div class="logo-text">RFQ<span>X</span></div>
+      </a>
+      <button class="sidebar-collapse-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+
+      <a href="#" class="nav-item">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <span>Dashboard</span>
+      </a>
+
+      <a href="#" class="nav-item active">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+        </div>
+        <span>RFQ Inbox</span>
+        <div class="nav-badge">12</div>
+      </a>
+
+      <a href="#" class="nav-item">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <span>Quote Builder</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <span>Cost Library</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <span>Buyers</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        </div>
+        <span>Analytics</span>
+      </a>
+
+      <div class="nav-section-label">System</div>
+
+      <a href="#" class="nav-item">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </div>
+        <span>Settings</span>
+      </a>
+
+      <a href="#" class="nav-item">
+        <div class="nav-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <span>Help</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-card">
+        <div class="user-avatar">RM</div>
+        <div class="user-info">
+          <div class="user-name">Rahim Miah</div>
+          <div class="user-role">Quotation Mgr</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="main-content">
+    <!-- TOP BAR -->
+    <header class="topbar">
+      <div class="breadcrumb">
+        <a href="#" class="breadcrumb-item">Dashboard</a>
+        <span class="breadcrumb-sep">/</span>
+        <span class="breadcrumb-current">RFQ Inbox</span>
+      </div>
+
+      <div class="topbar-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <span class="topbar-search-text">Search RFQs, quotes...</span>
+        <span class="topbar-search-kbd">Ctrl+K</span>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="topbar-btn" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notification-dot"></span>
+        </button>
+        <button class="quinn-toggle">
+          <span class="quinn-dot"></span>
+          QUINN
+        </button>
+      </div>
+    </header>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <h1 class="page-title">RFQ Inbox</h1>
+      <span class="page-title-count">12 open</span>
+
+      <div class="page-actions">
+        <div class="view-toggle">
+          <button class="view-toggle-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+            List
+          </button>
+          <button class="view-toggle-btn active">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Board
+          </button>
+        </div>
+
+        <button class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          Upload RFQ
+        </button>
+      </div>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <div class="filter-select">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        Status
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="filter-select">
+        Buyer
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="filter-select filter-active">
+        Priority: All
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="filter-select">
+        Assigned To
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="filter-select">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Date Range
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+      <div class="filter-search">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="Search RFQ#, buyer, product...">
+      </div>
+    </div>
+
+    <!-- KANBAN BOARD -->
+    <div class="board-container">
+      <div class="board">
+
+        <!-- COLUMN: NEW -->
+        <div class="board-column column-active">
+          <div class="column-header">
+            <div class="column-status-dot dot-new"></div>
+            <div class="column-title">New</div>
+            <div class="column-count">3</div>
+            <div class="column-value">$482K</div>
+          </div>
+          <div class="column-cards">
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0042</div>
+                <div class="priority-badge priority-1">P1</div>
+              </div>
+              <div class="rfq-card-buyer">H&M <span class="buyer-tier">★★★★★</span></div>
+              <div class="rfq-card-product">Men's Polo Shirt — 220 GSM Piqué, 100% Cotton</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">FOB</span>
+                <span class="rfq-tag">OEKO-TEX</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">50,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$212,500</span>
+                </div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline deadline-red">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  6h left
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-email">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-1">RM</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0041</div>
+                <div class="priority-badge priority-2">P2</div>
+              </div>
+              <div class="rfq-card-buyer">Primark <span class="buyer-tier">★★★★</span></div>
+              <div class="rfq-card-product">Ladies' Denim Jacket — 10 oz, 98/2 Cotton-Elastane</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">CIF</span>
+                <span class="rfq-tag">BCI Cotton</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">30,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$189,000</span>
+                </div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline deadline-amber">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  18h left
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-portal">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-2">SA</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0040</div>
+                <div class="priority-badge priority-3">P3</div>
+              </div>
+              <div class="rfq-card-buyer">ASOS <span class="buyer-tier">★★★</span></div>
+              <div class="rfq-card-product">Women's Oversized T-Shirt — 180 GSM Jersey, Organic</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">FOB</span>
+                <span class="rfq-tag">GOTS</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">20,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$81,000</span>
+                </div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline deadline-green">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  3d left
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-email">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-3">TH</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="column-add">
+            <button class="column-add-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Upload RFQ
+            </button>
+          </div>
+        </div>
+
+        <!-- COLUMN: EXTRACTING -->
+        <div class="board-column">
+          <div class="column-header">
+            <div class="column-status-dot dot-extracting"></div>
+            <div class="column-title">Extracting</div>
+            <div class="column-count">2</div>
+            <div class="column-value">$305K</div>
+          </div>
+          <div class="column-cards">
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0039</div>
+                <div class="priority-badge priority-1">P1</div>
+              </div>
+              <div class="rfq-card-buyer">Zara <span class="buyer-tier">★★★★★</span></div>
+              <div class="rfq-card-product">Men's Chino Trouser — 260 GSM Twill, Stretch</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">FOB</span>
+                <span class="rfq-tag">REACH</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">40,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$228,000</span>
+                </div>
+              </div>
+              <div class="confidence-bar">
+                <div class="confidence-fill confidence-med" style="width: 62%"></div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline deadline-amber">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  12h left
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-portal">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-1">RM</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0038</div>
+                <div class="priority-badge priority-4">P4</div>
+              </div>
+              <div class="rfq-card-buyer">Target <span class="buyer-tier">★★★</span></div>
+              <div class="rfq-card-product">Kids' Hoodie — 320 GSM Fleece, 60/40 CVC</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">DDP</span>
+                <span class="rfq-tag">CPSIA</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">15,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$77,250</span>
+                </div>
+              </div>
+              <div class="confidence-bar">
+                <div class="confidence-fill confidence-high" style="width: 88%"></div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline deadline-green">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  4d left
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-whatsapp">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-4">NK</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- COLUMN: COSTING -->
+        <div class="board-column">
+          <div class="column-header">
+            <div class="column-status-dot dot-costing"></div>
+            <div class="column-title">Costing</div>
+            <div class="column-count">2</div>
+            <div class="column-value">$415K</div>
+          </div>
+          <div class="column-cards">
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0037</div>
+                <div class="priority-badge priority-2">P2</div>
+              </div>
+              <div class="rfq-card-buyer">Next <span class="buyer-tier">★★★★</span></div>
+              <div class="rfq-card-product">Men's Oxford Shirt — 120 GSM Poplin, 100% Cotton</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">FOB</span>
+                <span class="rfq-tag">OEKO-TEX</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">35,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$178,500</span>
+                </div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline deadline-amber">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  20h left
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-email">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-1">RM</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0036</div>
+                <div class="priority-badge priority-1">P1</div>
+              </div>
+              <div class="rfq-card-buyer">H&M <span class="buyer-tier">★★★★★</span></div>
+              <div class="rfq-card-product">Women's Jogger — 280 GSM French Terry, 95/5</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">FOB</span>
+                <span class="rfq-tag">GRS</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">45,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$236,250</span>
+                </div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline deadline-red">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  4h left
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-email">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-2">SA</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- COLUMN: REVIEW -->
+        <div class="board-column">
+          <div class="column-header">
+            <div class="column-status-dot dot-review"></div>
+            <div class="column-title">Review</div>
+            <div class="column-count">2</div>
+            <div class="column-value">$340K</div>
+          </div>
+          <div class="column-cards">
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0035</div>
+                <div class="priority-badge priority-2">P2</div>
+              </div>
+              <div class="rfq-card-buyer">Mango <span class="buyer-tier">★★★★</span></div>
+              <div class="rfq-card-product">Ladies' Blouse — 110 GSM Viscose Crepe, Printed</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">FOB</span>
+                <span class="rfq-tag">3 Colorways</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">25,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$118,750</span>
+                </div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline deadline-green">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  2d left
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-email">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-3">TH</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0034</div>
+                <div class="priority-badge priority-3">P3</div>
+              </div>
+              <div class="rfq-card-buyer">Primark <span class="buyer-tier">★★★★</span></div>
+              <div class="rfq-card-product">Men's Basic Crew Tee — 160 GSM Single Jersey</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">CIF</span>
+                <span class="rfq-tag">6 Colors</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">80,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$221,600</span>
+                </div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline deadline-green">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  5d left
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-portal">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-1">RM</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- COLUMN: SENT -->
+        <div class="board-column">
+          <div class="column-header">
+            <div class="column-status-dot dot-sent"></div>
+            <div class="column-title">Sent</div>
+            <div class="column-count">2</div>
+            <div class="column-value">$287K</div>
+          </div>
+          <div class="column-cards">
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0033</div>
+                <div class="priority-badge priority-2">P2</div>
+              </div>
+              <div class="rfq-card-buyer">Zara <span class="buyer-tier">★★★★★</span></div>
+              <div class="rfq-card-product">Women's Linen Blazer — 190 GSM, 100% Linen</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">FOB</span>
+                <span class="rfq-tag">Opened</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">12,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$134,400</span>
+                </div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline" style="color: var(--aqua);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  Sent 2h ago
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-email">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-5">AK</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0032</div>
+                <div class="priority-badge priority-3">P3</div>
+              </div>
+              <div class="rfq-card-buyer">George (Asda) <span class="buyer-tier">★★★</span></div>
+              <div class="rfq-card-product">Boys' Cargo Shorts — 240 GSM Canvas, Enzyme Wash</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">FOB</span>
+                <span class="rfq-tag">Pending</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">22,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$152,900</span>
+                </div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline" style="color: var(--aqua);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  Sent 1d ago
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-upload">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-2">SA</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- COLUMN: FOLLOWED UP -->
+        <div class="board-column">
+          <div class="column-header">
+            <div class="column-status-dot dot-followed_up"></div>
+            <div class="column-title">Followed Up</div>
+            <div class="column-count">1</div>
+            <div class="column-value">$175K</div>
+          </div>
+          <div class="column-cards">
+
+            <div class="rfq-card" draggable="true">
+              <div class="rfq-card-header">
+                <div class="rfq-card-number">RFQ-2603-0031</div>
+                <div class="priority-badge priority-2">P2</div>
+              </div>
+              <div class="rfq-card-buyer">H&M <span class="buyer-tier">★★★★★</span></div>
+              <div class="rfq-card-product">Women's Midi Dress — 140 GSM Rayon, All-Over Print</div>
+              <div class="rfq-card-tags">
+                <span class="rfq-tag">FOB</span>
+                <span class="rfq-tag">Counter Offer</span>
+              </div>
+              <div class="rfq-card-meta">
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3v4M8 3v4"/></svg>
+                  <span class="rfq-meta-value">28,000 pcs</span>
+                </div>
+                <div class="rfq-meta-item">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  <span class="rfq-meta-value">$175,000</span>
+                </div>
+              </div>
+              <div class="rfq-card-footer">
+                <div class="rfq-deadline" style="color: var(--yellow);">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  Awaiting reply
+                </div>
+                <div style="display:flex;align-items:center;gap:6px;">
+                  <div class="rfq-source-icon source-email">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 7L2 7"/></svg>
+                  </div>
+                  <div class="rfq-card-assignee avatar-1">RM</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== QUINN PANEL ===== -->
+  <aside class="quinn-panel">
+    <div class="quinn-header">
+      <div class="quinn-avatar">Q</div>
+      <div>
+        <div class="quinn-title">QUINN</div>
+        <div class="quinn-status"><span class="quinn-status-dot"></span> Online</div>
+      </div>
+      <div class="quinn-header-actions">
+        <button class="topbar-btn" title="Expand" style="width:28px;height:28px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+        </button>
+        <button class="topbar-btn" title="Close" style="width:28px;height:28px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="quinn-messages">
+      <!-- Bot message -->
+      <div class="quinn-msg quinn-msg-bot">
+        <div class="quinn-msg-avatar">Q</div>
+        <div class="quinn-msg-content">
+          <div class="quinn-msg-bubble">
+            Good morning, Rahim! You have <strong>3 new RFQs</strong> today. The H&M polo shirt request is <strong style="color: var(--red);">urgent — 6 hours</strong> until deadline. Want me to prioritize extraction?
+          </div>
+          <div class="quinn-tool-chips">
+            <span class="quinn-tool-chip">list_rfqs</span>
+            <span class="quinn-tool-chip">check_deadlines</span>
+          </div>
+          <div class="quinn-action-btns">
+            <button class="quinn-action-btn">Extract H&M RFQ</button>
+            <button class="quinn-action-btn">Show all urgent</button>
+          </div>
+          <div class="quinn-msg-time">09:14 AM</div>
+        </div>
+      </div>
+
+      <!-- User message -->
+      <div class="quinn-msg quinn-msg-user">
+        <div class="quinn-msg-avatar">RM</div>
+        <div class="quinn-msg-content">
+          <div class="quinn-msg-bubble">
+            Yes, extract the H&M polo RFQ first. What's the estimated FOB based on last quarter?
+          </div>
+          <div class="quinn-msg-time">09:15 AM</div>
+        </div>
+      </div>
+
+      <!-- Bot message -->
+      <div class="quinn-msg quinn-msg-bot">
+        <div class="quinn-msg-avatar">Q</div>
+        <div class="quinn-msg-content">
+          <div class="quinn-msg-bubble">
+            Starting extraction on <strong>RFQ-2603-0042</strong>. Based on your last H&M polo quote (Q4 2025):
+            <br><br>
+            <table style="width:100%;font-family:var(--font-mono);font-size:11px;border-collapse:collapse;">
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:4px 0;color:var(--text-muted);">Last FOB/unit</td>
+                <td style="padding:4px 0;text-align:right;color:var(--text-primary);">$4.25</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:4px 0;color:var(--text-muted);">Fabric cost trend</td>
+                <td style="padding:4px 0;text-align:right;color:var(--orange);">+3.2%</td>
+              </tr>
+              <tr>
+                <td style="padding:4px 0;color:var(--text-muted);">Estimated FOB</td>
+                <td style="padding:4px 0;text-align:right;color:var(--aqua);font-weight:600;">$4.38</td>
+              </tr>
+            </table>
+          </div>
+          <div class="quinn-tool-chips">
+            <span class="quinn-tool-chip">get_rfq_details</span>
+            <span class="quinn-tool-chip">search_quotes</span>
+            <span class="quinn-tool-chip">cost_engine</span>
+          </div>
+          <div class="quinn-msg-time">09:15 AM</div>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="quinn-msg quinn-msg-bot">
+        <div class="quinn-msg-avatar">Q</div>
+        <div class="quinn-msg-content">
+          <div class="quinn-typing">
+            <div class="quinn-typing-dots">
+              <div class="quinn-typing-dot"></div>
+              <div class="quinn-typing-dot"></div>
+              <div class="quinn-typing-dot"></div>
+            </div>
+            <span style="font-size:11px;color:var(--text-muted);">Extracting specs...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="quinn-input-area">
+      <div class="quinn-quick-actions">
+        <button class="quinn-quick-btn">/status</button>
+        <button class="quinn-quick-btn">/quote</button>
+        <button class="quinn-quick-btn">/assign</button>
+        <button class="quinn-quick-btn">/report</button>
+        <button class="quinn-quick-btn">/follow-up</button>
+        <button class="quinn-quick-btn">/help</button>
+      </div>
+      <div class="quinn-input-wrap">
+        <input type="text" class="quinn-input" placeholder="Ask QUINN anything...">
+        <button class="quinn-send-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+</div>
+</body>
+</html>

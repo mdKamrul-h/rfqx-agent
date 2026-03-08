@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RFQ #RFQ-202603-0042 — RFQX</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deepest: #0C1420;
+      --bg-deep: #131E30;
+      --bg-card: #1A2640;
+      --bg-card-hover: #1F2F4D;
+      --bg-surface: #223352;
+      --border: #2A3F5F;
+      --border-light: #334A6E;
+      --text-primary: #F1F5F9;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --aqua: #57ACAF;
+      --aqua-hover: #6BC0C3;
+      --aqua-dim: rgba(87,172,175,0.15);
+      --yellow: #EAB308;
+      --yellow-dim: rgba(234,179,8,0.15);
+      --green: #22C55E;
+      --green-dim: rgba(34,197,94,0.12);
+      --red: #EF4444;
+      --red-dim: rgba(239,68,68,0.12);
+      --blue: #3B82F6;
+      --blue-dim: rgba(59,130,246,0.12);
+      --purple: #A855F7;
+      --purple-dim: rgba(168,85,247,0.12);
+      --orange: #F97316;
+      --orange-dim: rgba(249,115,22,0.12);
+      --amber: #F59E0B;
+      --amber-dim: rgba(245,158,11,0.12);
+      --sidebar-w: 250px;
+      --topbar-h: 56px;
+      --radius: 8px;
+      --radius-sm: 6px;
+      --transition: 150ms ease;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg-deepest);
+      color: var(--text-primary);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ─── Sidebar ─── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--bg-deep);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 40;
+    }
+
+    .sidebar-logo {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sidebar-logo .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--aqua);
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px; color: #0C1420;
+    }
+
+    .sidebar-logo .logo-text {
+      font-size: 18px; font-weight: 700; color: var(--text-primary); letter-spacing: -0.5px;
+    }
+
+    .sidebar-logo .logo-text span { color: var(--yellow); }
+
+    .sidebar-nav {
+      flex: 1; padding: 12px;
+      display: flex; flex-direction: column; gap: 2px;
+    }
+
+    .nav-section-label {
+      font-size: 11px; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 16px 12px 6px;
+    }
+
+    .nav-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: var(--radius-sm);
+      color: var(--text-secondary); text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      transition: all var(--transition); cursor: pointer;
+    }
+
+    .nav-item:hover { background: var(--bg-card); color: var(--text-primary); }
+    .nav-item.active { background: var(--aqua-dim); color: var(--aqua); }
+
+    .nav-item .nav-icon {
+      width: 20px; height: 20px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+
+    .nav-item .nav-badge {
+      margin-left: auto; background: var(--aqua); color: #0C1420;
+      font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 10px;
+    }
+
+    .sidebar-bottom { padding: 12px; border-top: 1px solid var(--border); }
+
+    .user-card {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 12px; border-radius: var(--radius-sm);
+      cursor: pointer; transition: background var(--transition);
+    }
+    .user-card:hover { background: var(--bg-card); }
+
+    .user-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--aqua);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 600; font-size: 13px; color: #0C1420; flex-shrink: 0;
+    }
+
+    .user-info { flex: 1; min-width: 0; }
+    .user-name { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .user-role { font-size: 11px; color: var(--text-muted); }
+
+    /* ─── Main Content ─── */
+    .main {
+      margin-left: var(--sidebar-w); flex: 1;
+      min-height: 100vh; display: flex; flex-direction: column;
+    }
+
+    /* ─── Top Bar ─── */
+    .topbar {
+      height: var(--topbar-h); background: var(--bg-deep);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 24px; gap: 16px;
+      position: sticky; top: 0; z-index: 30;
+    }
+
+    .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-muted); }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; transition: color var(--transition); }
+    .breadcrumb a:hover { color: var(--aqua); }
+    .breadcrumb .current { color: var(--text-primary); font-weight: 500; }
+
+    .topbar-spacer { flex: 1; }
+
+    .search-trigger {
+      display: flex; align-items: center; gap: 8px;
+      padding: 6px 14px; background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text-muted); font-size: 13px; cursor: pointer;
+      transition: all var(--transition); min-width: 200px;
+    }
+    .search-trigger:hover { border-color: var(--border-light); color: var(--text-secondary); }
+    .search-trigger kbd {
+      margin-left: auto; font-size: 11px; background: var(--bg-surface);
+      padding: 1px 5px; border-radius: 3px; border: 1px solid var(--border); font-family: inherit;
+    }
+
+    .topbar-icon {
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-sm); color: var(--text-secondary);
+      cursor: pointer; transition: all var(--transition); position: relative;
+    }
+    .topbar-icon:hover { background: var(--bg-card); color: var(--text-primary); }
+
+    .notif-dot {
+      position: absolute; top: 6px; right: 6px;
+      width: 8px; height: 8px; background: var(--red);
+      border-radius: 50%; border: 2px solid var(--bg-deep);
+    }
+
+    /* ─── Page Content ─── */
+    .page-content { flex: 1; padding: 24px; }
+
+    /* ─── Detail Header ─── */
+    .detail-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
+    }
+
+    .detail-header-left { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+
+    .back-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 12px; background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      color: var(--text-secondary); font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: all var(--transition); text-decoration: none;
+    }
+    .back-btn:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+
+    .detail-title { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+
+    .detail-header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+    /* ─── Badges ─── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 10px; border-radius: 12px;
+      font-size: 12px; font-weight: 600; white-space: nowrap;
+    }
+
+    .badge-new { background: var(--blue-dim); color: var(--blue); }
+    .badge-extracting { background: var(--purple-dim); color: var(--purple); }
+    .badge-extracted { background: var(--aqua-dim); color: var(--aqua); }
+    .badge-costing { background: var(--amber-dim); color: var(--amber); }
+    .badge-review { background: var(--yellow-dim); color: var(--yellow); }
+    .badge-sent { background: var(--green-dim); color: var(--green); }
+    .badge-won { background: var(--green-dim); color: var(--green); }
+    .badge-lost { background: var(--red-dim); color: var(--red); }
+    .badge-expired { background: var(--red-dim); color: var(--red); }
+    .badge-followed-up { background: var(--orange-dim); color: var(--orange); }
+
+    .badge-priority-1 { background: var(--red-dim); color: var(--red); }
+    .badge-priority-2 { background: var(--orange-dim); color: var(--orange); }
+    .badge-priority-3 { background: var(--yellow-dim); color: var(--yellow); }
+    .badge-priority-4 { background: var(--blue-dim); color: var(--blue); }
+
+    .badge-source { background: var(--bg-surface); color: var(--text-secondary); }
+
+    /* ─── Buttons ─── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 600; font-family: inherit;
+      cursor: pointer; transition: all var(--transition);
+      border: 1px solid transparent; text-decoration: none;
+    }
+
+    .btn-primary { background: var(--aqua); color: #0C1420; border-color: var(--aqua); }
+    .btn-primary:hover { background: var(--aqua-hover); border-color: var(--aqua-hover); transform: translateY(-1px); }
+
+    .btn-secondary { background: var(--bg-card); color: var(--text-primary); border-color: var(--border); }
+    .btn-secondary:hover { background: var(--bg-card-hover); border-color: var(--border-light); }
+
+    .btn-ghost { background: transparent; color: var(--text-secondary); border-color: transparent; }
+    .btn-ghost:hover { background: var(--bg-card); color: var(--text-primary); }
+
+    .btn-destructive { background: var(--red-dim); color: var(--red); border-color: transparent; }
+    .btn-destructive:hover { background: rgba(239,68,68,0.2); }
+
+    .dropdown-wrapper { position: relative; }
+    .dropdown-menu {
+      position: absolute; top: 100%; right: 0; margin-top: 4px;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); min-width: 180px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.4); z-index: 50;
+      display: none; padding: 4px;
+    }
+    .dropdown-menu.show { display: block; }
+    .dropdown-item {
+      display: flex; align-items: center; gap: 8px;
+      padding: 8px 12px; border-radius: var(--radius-sm);
+      font-size: 13px; color: var(--text-secondary);
+      cursor: pointer; transition: all var(--transition);
+    }
+    .dropdown-item:hover { background: var(--bg-card-hover); color: var(--text-primary); }
+
+    /* ─── Two Column Layout ─── */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 24px;
+      align-items: start;
+    }
+
+    /* ─── Tabs ─── */
+    .tabs {
+      display: flex; gap: 0; border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px 20px; font-size: 13px; font-weight: 500;
+      color: var(--text-muted); cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all var(--transition);
+    }
+    .tab:hover { color: var(--text-secondary); }
+    .tab.active { color: var(--aqua); border-bottom-color: var(--aqua); }
+
+    .tab-badge {
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-left: 6px; background: var(--bg-surface);
+      color: var(--text-muted); font-size: 11px; font-weight: 600;
+      width: 20px; height: 20px; border-radius: 10px;
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ─── Card ─── */
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+    }
+
+    .card-header {
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .card-body { padding: 20px; }
+
+    /* ─── Extracted Specs Table ─── */
+    .specs-table { width: 100%; border-collapse: collapse; }
+
+    .specs-table th {
+      text-align: left; padding: 10px 14px;
+      font-size: 11px; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      background: var(--bg-deep); border-bottom: 1px solid var(--border);
+    }
+
+    .specs-table td {
+      padding: 12px 14px; font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary); vertical-align: middle;
+    }
+
+    .specs-table tr:last-child td { border-bottom: none; }
+    .specs-table tr:hover { background: var(--bg-card-hover); }
+
+    .specs-table .field-name { color: var(--text-secondary); font-weight: 500; min-width: 160px; }
+
+    .specs-table .flagged { background: rgba(245,158,11,0.06); }
+    .specs-table .flagged .field-name { color: var(--amber); }
+
+    /* ─── Confidence Bar ─── */
+    .confidence-bar-wrapper {
+      display: flex; align-items: center; gap: 8px; min-width: 140px;
+    }
+
+    .confidence-bar {
+      flex: 1; height: 6px; background: var(--bg-surface);
+      border-radius: 3px; overflow: hidden; max-width: 80px;
+    }
+
+    .confidence-bar-fill {
+      height: 100%; border-radius: 3px;
+      transition: width 0.3s ease;
+    }
+
+    .confidence-bar-fill.high { background: var(--green); }
+    .confidence-bar-fill.medium { background: var(--amber); }
+    .confidence-bar-fill.low { background: var(--red); }
+
+    .confidence-value { font-size: 12px; font-weight: 600; min-width: 32px; }
+    .confidence-value.high { color: var(--green); }
+    .confidence-value.medium { color: var(--amber); }
+    .confidence-value.low { color: var(--red); }
+
+    .edit-icon {
+      width: 28px; height: 28px; border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-muted); cursor: pointer;
+      transition: all var(--transition);
+    }
+    .edit-icon:hover { background: var(--bg-surface); color: var(--aqua); }
+
+    /* ─── Attachments Grid ─── */
+    .attachments-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .attachment-card {
+      background: var(--bg-deep); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+      transition: all var(--transition); cursor: pointer;
+    }
+    .attachment-card:hover { border-color: var(--border-light); background: var(--bg-card-hover); }
+
+    .attachment-icon {
+      width: 40px; height: 40px; border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+    .attachment-icon.pdf { background: var(--red-dim); color: var(--red); }
+    .attachment-icon.xlsx { background: var(--green-dim); color: var(--green); }
+    .attachment-icon.img { background: var(--blue-dim); color: var(--blue); }
+
+    .attachment-name { font-size: 13px; font-weight: 500; color: var(--text-primary); word-break: break-word; }
+    .attachment-meta { font-size: 11px; color: var(--text-muted); }
+
+    .attachment-actions { display: flex; gap: 6px; margin-top: auto; }
+    .attachment-actions .btn { padding: 5px 10px; font-size: 11px; }
+
+    /* ─── Cost Sheet (Tab 3) ─── */
+    .cost-table { width: 100%; border-collapse: collapse; }
+    .cost-table th {
+      text-align: left; padding: 10px 14px;
+      font-size: 11px; font-weight: 600; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.5px;
+      background: var(--bg-deep); border-bottom: 1px solid var(--border);
+    }
+    .cost-table th:nth-child(2), .cost-table th:nth-child(3) { text-align: right; }
+    .cost-table td {
+      padding: 10px 14px; font-size: 13px;
+      border-bottom: 1px solid var(--border); color: var(--text-primary);
+    }
+    .cost-table td:nth-child(2), .cost-table td:nth-child(3) { text-align: right; font-variant-numeric: tabular-nums; }
+    .cost-table tr:last-child td { border-bottom: none; }
+    .cost-table tr:hover { background: var(--bg-card-hover); }
+    .cost-table .cost-total-row { background: var(--bg-deep); }
+    .cost-table .cost-total-row td { font-weight: 700; color: var(--aqua); }
+    .cost-table .cost-subtotal td { font-weight: 600; border-top: 1px solid var(--border-light); }
+    .cost-table .cost-notes { color: var(--text-muted); font-size: 12px; }
+
+    /* ─── Communication Timeline ─── */
+    .comm-timeline { display: flex; flex-direction: column; gap: 16px; }
+
+    .comm-item {
+      display: flex; gap: 12px; padding: 14px;
+      background: var(--bg-deep); border-radius: var(--radius);
+      border: 1px solid var(--border);
+    }
+
+    .comm-icon {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 14px;
+    }
+    .comm-icon.sent { background: var(--aqua-dim); color: var(--aqua); }
+    .comm-icon.received { background: var(--blue-dim); color: var(--blue); }
+    .comm-icon.note { background: var(--yellow-dim); color: var(--yellow); }
+
+    .comm-body { flex: 1; min-width: 0; }
+    .comm-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .comm-from { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .comm-time { font-size: 11px; color: var(--text-muted); }
+    .comm-subject { font-size: 13px; font-weight: 500; color: var(--text-secondary); margin-bottom: 4px; }
+    .comm-preview { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+
+    /* ─── Right Column ─── */
+    .right-column { display: flex; flex-direction: column; gap: 20px; }
+
+    /* ─── Status Timeline ─── */
+    .status-timeline { display: flex; flex-direction: column; gap: 0; }
+
+    .timeline-item {
+      display: flex; gap: 12px; position: relative;
+      padding-bottom: 20px;
+    }
+
+    .timeline-item:last-child { padding-bottom: 0; }
+
+    .timeline-line {
+      position: absolute; left: 15px; top: 32px;
+      width: 2px; bottom: 0; background: var(--border);
+    }
+
+    .timeline-item:last-child .timeline-line { display: none; }
+
+    .timeline-dot {
+      width: 32px; height: 32px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 12px; z-index: 1;
+    }
+
+    .timeline-dot.completed { background: var(--green-dim); color: var(--green); }
+    .timeline-dot.current { background: var(--aqua-dim); color: var(--aqua); border: 2px solid var(--aqua); }
+    .timeline-dot.pending { background: var(--bg-surface); color: var(--text-muted); }
+
+    .timeline-content { flex: 1; min-width: 0; }
+    .timeline-title { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .timeline-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .timeline-duration {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; color: var(--text-muted);
+      background: var(--bg-surface); padding: 2px 8px;
+      border-radius: 10px; margin-top: 4px;
+    }
+
+    /* ─── Internal Notes ─── */
+    .notes-thread { display: flex; flex-direction: column; gap: 12px; }
+
+    .note-item {
+      padding: 12px; background: var(--bg-deep);
+      border-radius: var(--radius); border: 1px solid var(--border);
+    }
+
+    .note-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+
+    .note-avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; flex-shrink: 0;
+    }
+
+    .note-author { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+    .note-time { font-size: 11px; color: var(--text-muted); margin-left: auto; }
+    .note-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .note-mention { color: var(--aqua); font-weight: 500; }
+
+    .note-input-wrapper {
+      display: flex; gap: 8px; margin-top: 4px;
+    }
+
+    .note-input {
+      flex: 1; padding: 10px 14px;
+      background: var(--bg-deep); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); color: var(--text-primary);
+      font-size: 13px; font-family: inherit; resize: none;
+      outline: none; transition: border-color var(--transition);
+    }
+    .note-input:focus { border-color: var(--aqua); }
+    .note-input::placeholder { color: var(--text-muted); }
+
+    /* ─── Activity Feed ─── */
+    .activity-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .activity-item {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 8px 0; border-bottom: 1px solid var(--border);
+    }
+    .activity-item:last-child { border-bottom: none; }
+
+    .activity-avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700; flex-shrink: 0;
+    }
+
+    .activity-text { font-size: 12px; color: var(--text-secondary); flex: 1; }
+    .activity-text strong { color: var(--text-primary); font-weight: 600; }
+    .activity-text .entity-link { color: var(--aqua); cursor: pointer; }
+    .activity-time { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+
+    /* ─── QUINN Panel ─── */
+    .quinn-toggle {
+      position: fixed; bottom: 24px; right: 24px;
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--aqua); color: #0C1420;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; box-shadow: 0 4px 20px rgba(87,172,175,0.3);
+      transition: all var(--transition); z-index: 50;
+      border: none; font-size: 18px; font-weight: 700;
+    }
+    .quinn-toggle:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(87,172,175,0.4); }
+
+    /* ─── Re-extract button ─── */
+    .re-extract-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; background: var(--amber-dim);
+      border-radius: var(--radius); margin-bottom: 16px;
+      border: 1px solid rgba(245,158,11,0.2);
+    }
+
+    .re-extract-info { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--amber); }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 1279px) {
+      .sidebar { transform: translateX(-100%); }
+      .main { margin-left: 0; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .search-trigger { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      .page-content { padding: 16px; }
+      .detail-header { flex-direction: column; align-items: flex-start; }
+      .detail-header-right { width: 100%; overflow-x: auto; }
+      .attachments-grid { grid-template-columns: 1fr; }
+      .tabs { overflow-x: auto; }
+      .tab { white-space: nowrap; padding: 10px 14px; }
+    }
+
+    /* ─── Utility ─── */
+    .text-muted { color: var(--text-muted); }
+    .text-secondary { color: var(--text-secondary); }
+    .font-mono { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+    .mt-2 { margin-top: 8px; }
+    .mt-4 { margin-top: 16px; }
+    .mb-2 { margin-bottom: 8px; }
+    .gap-2 { gap: 8px; }
+    .flex { display: flex; }
+    .items-center { align-items: center; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════ Sidebar ═══════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">RX</div>
+    <div class="logo-text">RFQ<span>X</span></div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+
+    <a href="#" class="nav-item">
+      <span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="3" y="13" width="7" height="4" rx="1"/><rect x="13" y="3" width="4" height="14" rx="1"/></svg></span>
+      Dashboard
+    </a>
+
+    <a href="#" class="nav-item active">
+      <span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7l6-4 6 4"/><rect x="3" y="7" width="12" height="10" rx="1"/><path d="M3 17l6-4 6 4"/></svg></span>
+      RFQ Inbox
+      <span class="nav-badge">12</span>
+    </a>
+
+    <a href="#" class="nav-item">
+      <span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2z"/><path d="M8 10h4M8 14h2M8 6h4"/></svg></span>
+      Quote Builder
+    </a>
+
+    <a href="#" class="nav-item">
+      <span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h16M2 3v14a1 1 0 001 1h14a1 1 0 001-1V3"/><path d="M6 3V1m6 2V1"/><path d="M2 7h16"/></svg></span>
+      Cost Library
+    </a>
+
+    <a href="#" class="nav-item">
+      <span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg></span>
+      Buyers
+    </a>
+
+    <a href="#" class="nav-item">
+      <span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg></span>
+      Analytics
+    </a>
+
+    <div class="nav-section-label">System</div>
+
+    <a href="#" class="nav-item">
+      <span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="2"/><path d="M16.24 11.49a1 1 0 00.2 1.1l.04.04a1.22 1.22 0 01-1.72 1.72l-.04-.04a1 1 0 00-1.1-.2 1 1 0 00-.61.91v.12a1.22 1.22 0 01-2.44 0v-.06a1 1 0 00-.66-.91 1 1 0 00-1.1.2l-.04.04a1.22 1.22 0 01-1.72-1.72l.04-.04a1 1 0 00.2-1.1 1 1 0 00-.91-.61h-.12a1.22 1.22 0 010-2.44h.06a1 1 0 00.91-.66 1 1 0 00-.2-1.1l-.04-.04a1.22 1.22 0 011.72-1.72l.04.04a1 1 0 001.1.2h.05a1 1 0 00.61-.91v-.12a1.22 1.22 0 012.44 0v.06a1 1 0 00.66.91 1 1 0 001.1-.2l.04-.04a1.22 1.22 0 011.72 1.72l-.04.04a1 1 0 00-.2 1.1v.05a1 1 0 00.91.61h.12a1.22 1.22 0 010 2.44h-.06a1 1 0 00-.91.66z"/></svg></span>
+      Settings
+    </a>
+
+    <a href="#" class="nav-item">
+      <span class="nav-icon"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="8"/><path d="M9 13v-1a3 3 0 013-3 1.5 1.5 0 00-1.5-1.5A1.5 1.5 0 009 9"/><circle cx="9" cy="16" r="0.5" fill="currentColor"/></svg></span>
+      Help
+    </a>
+  </nav>
+
+  <div class="sidebar-bottom">
+    <div class="user-card">
+      <div class="user-avatar">RA</div>
+      <div class="user-info">
+        <div class="user-name">Rahim Ahmed</div>
+        <div class="user-role">Quotation Manager</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══════════════ Main ═══════════════ -->
+<main class="main">
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <div class="breadcrumb">
+      <a href="#">Dashboard</a>
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 2l5 5-5 5"/></svg>
+      <a href="#">RFQ Inbox</a>
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 2l5 5-5 5"/></svg>
+      <span class="current">RFQ-202603-0042</span>
+    </div>
+
+    <div class="topbar-spacer"></div>
+
+    <div class="search-trigger">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="5"/><path d="M13 13l-3.5-3.5"/></svg>
+      Search...
+      <kbd>Ctrl+K</kbd>
+    </div>
+
+    <div class="topbar-icon">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.73 21a2 2 0 01-3.46 0M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+      <div class="notif-dot"></div>
+    </div>
+
+    <div class="topbar-icon" title="QUINN AI Copilot">
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="page-content">
+
+    <!-- Detail Header -->
+    <div class="detail-header">
+      <div class="detail-header-left">
+        <a href="#" class="back-btn">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5"/></svg>
+          Back
+        </a>
+        <h1 class="detail-title">RFQ-202603-0042</h1>
+        <span class="badge badge-review">Review</span>
+        <span class="badge badge-priority-2">P2 - High</span>
+        <span class="badge badge-source">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:2px"><rect x="2" y="4" width="16" height="12" rx="1"/><path d="M2 4l8 5 8-5"/></svg>
+          Email
+        </span>
+      </div>
+      <div class="detail-header-right">
+        <div class="dropdown-wrapper">
+          <button class="btn btn-secondary" onclick="this.nextElementSibling.classList.toggle('show')">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="7" cy="7" r="6"/><path d="M7 4v6M4 7h6"/></svg>
+            Assign
+            <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l3 3 3-3"/></svg>
+          </button>
+          <div class="dropdown-menu">
+            <div class="dropdown-item">
+              <div class="note-avatar" style="background:var(--aqua);color:#0C1420;width:22px;height:22px;font-size:9px;">RA</div>
+              Rahim Ahmed
+            </div>
+            <div class="dropdown-item">
+              <div class="note-avatar" style="background:var(--purple);color:#fff;width:22px;height:22px;font-size:9px;">SK</div>
+              Sarah Khan
+            </div>
+            <div class="dropdown-item">
+              <div class="note-avatar" style="background:var(--orange);color:#fff;width:22px;height:22px;font-size:9px;">MI</div>
+              Meherun Islam
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2z"/><path d="M8 10h4M8 14h2M8 6h4"/></svg>
+          Build Quote
+        </button>
+        <button class="btn btn-destructive">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h12M5 3v11a1 1 0 001 1h6a1 1 0 001-1V3M7 3V1h4v2"/></svg>
+          Archive
+        </button>
+      </div>
+    </div>
+
+    <!-- Two Column Layout -->
+    <div class="detail-grid">
+
+      <!-- ═══ Left Column ═══ -->
+      <div class="left-column">
+
+        <!-- Tabs -->
+        <div class="tabs">
+          <div class="tab active" onclick="switchTab(this, 'tab-specs')">Extracted Specs</div>
+          <div class="tab" onclick="switchTab(this, 'tab-attachments')">Attachments <span class="tab-badge">3</span></div>
+          <div class="tab" onclick="switchTab(this, 'tab-costsheet')">Cost Sheet</div>
+          <div class="tab" onclick="switchTab(this, 'tab-communication')">Communication <span class="tab-badge">4</span></div>
+        </div>
+
+        <!-- Tab 1: Extracted Specs -->
+        <div id="tab-specs" class="tab-content active">
+          <div class="re-extract-bar">
+            <div class="re-extract-info">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 1v6M8 11v.01"/><circle cx="8" cy="8" r="7"/></svg>
+              3 fields flagged for review (confidence &lt; 85%)
+            </div>
+            <button class="btn btn-secondary" style="padding:5px 12px;font-size:12px;">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 1l6 6M7 1H1v6"/><path d="M13 13l-6-6M7 13h6V7"/></svg>
+              Re-extract
+            </button>
+          </div>
+
+          <div class="card">
+            <table class="specs-table">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Extracted Value</th>
+                  <th>Confidence</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="field-name">Product Type</td>
+                  <td>Men's Polo Shirt - Short Sleeve</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:97%"></div></div>
+                      <span class="confidence-value high">97%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Style Number</td>
+                  <td>HM-PS-2026-AW-4421</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:99%"></div></div>
+                      <span class="confidence-value high">99%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Season</td>
+                  <td>AW 2026</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:95%"></div></div>
+                      <span class="confidence-value high">95%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Fabric Composition</td>
+                  <td>100% Cotton Pique</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:96%"></div></div>
+                      <span class="confidence-value high">96%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Fabric GSM</td>
+                  <td>220 GSM</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:94%"></div></div>
+                      <span class="confidence-value high">94%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr class="flagged">
+                  <td class="field-name">Yarn Count</td>
+                  <td>26 Ne Combed</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill medium" style="width:78%"></div></div>
+                      <span class="confidence-value medium">78%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Colorways</td>
+                  <td>Navy, White, Heather Grey, Burgundy, Forest Green</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:92%"></div></div>
+                      <span class="confidence-value high">92%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Total Quantity</td>
+                  <td style="font-weight:600;">50,000 pcs</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:99%"></div></div>
+                      <span class="confidence-value high">99%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Size Breakdown</td>
+                  <td>S: 7,500 / M: 15,000 / L: 15,000 / XL: 10,000 / XXL: 2,500</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:93%"></div></div>
+                      <span class="confidence-value high">93%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Delivery Date</td>
+                  <td>15 July 2026</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:98%"></div></div>
+                      <span class="confidence-value high">98%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Delivery Port</td>
+                  <td>Hamburg, Germany</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:96%"></div></div>
+                      <span class="confidence-value high">96%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Incoterm</td>
+                  <td>FOB</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:99%"></div></div>
+                      <span class="confidence-value high">99%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr class="flagged">
+                  <td class="field-name">Payment Terms</td>
+                  <td>60 days from B/L date</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill medium" style="width:82%"></div></div>
+                      <span class="confidence-value medium">82%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Certifications</td>
+                  <td>OEKO-TEX Standard 100, BSCI</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:91%"></div></div>
+                      <span class="confidence-value high">91%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Testing</td>
+                  <td>Colorfastness, Pilling, Shrinkage, Tensile Strength</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:90%"></div></div>
+                      <span class="confidence-value high">90%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr class="flagged">
+                  <td class="field-name">Packaging Specs</td>
+                  <td>Individual polybag, 12 pcs/inner box, 48 pcs/master carton</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill low" style="width:72%"></div></div>
+                      <span class="confidence-value low">72%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Embellishment</td>
+                  <td>Embroidered logo on left chest (8,000 stitches), woven label at collar</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:88%"></div></div>
+                      <span class="confidence-value high">88%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+                <tr>
+                  <td class="field-name">Buyer Reference</td>
+                  <td>HM/BD/AW26/POLO/4421</td>
+                  <td>
+                    <div class="confidence-bar-wrapper">
+                      <div class="confidence-bar"><div class="confidence-bar-fill high" style="width:99%"></div></div>
+                      <span class="confidence-value high">99%</span>
+                    </div>
+                  </td>
+                  <td><div class="edit-icon"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 1L13 3 5 11H3V9z"/></svg></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tab 2: Attachments -->
+        <div id="tab-attachments" class="tab-content">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+            <div style="font-size:13px;color:var(--text-secondary);">3 files attached</div>
+            <button class="btn btn-secondary" style="font-size:12px;padding:6px 12px;">
+              <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 1v10M2 6l5 5 5-5"/></svg>
+              Upload More
+            </button>
+          </div>
+          <div class="attachments-grid">
+            <div class="attachment-card">
+              <div class="attachment-icon pdf">PDF</div>
+              <div class="attachment-name">HM_AW26_Polo_TechPack_v2.pdf</div>
+              <div class="attachment-meta">2.4 MB - Uploaded Mar 5, 2026</div>
+              <div class="attachment-actions">
+                <button class="btn btn-secondary">View</button>
+                <button class="btn btn-ghost">Download</button>
+                <button class="btn btn-ghost" title="View OCR text">OCR</button>
+              </div>
+            </div>
+            <div class="attachment-card">
+              <div class="attachment-icon xlsx">XLS</div>
+              <div class="attachment-name">HM_Size_Spec_Sheet.xlsx</div>
+              <div class="attachment-meta">340 KB - Uploaded Mar 5, 2026</div>
+              <div class="attachment-actions">
+                <button class="btn btn-secondary">View</button>
+                <button class="btn btn-ghost">Download</button>
+              </div>
+            </div>
+            <div class="attachment-card">
+              <div class="attachment-icon img">IMG</div>
+              <div class="attachment-name">polo_reference_photo.jpg</div>
+              <div class="attachment-meta">1.1 MB - Uploaded Mar 5, 2026</div>
+              <div class="attachment-actions">
+                <button class="btn btn-secondary">View</button>
+                <button class="btn btn-ghost">Download</button>
+                <button class="btn btn-ghost" title="View OCR text">OCR</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Cost Sheet -->
+        <div id="tab-costsheet" class="tab-content">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Cost Breakdown - QT-202603-0038 (Draft)</div>
+              <a href="#" class="btn btn-secondary" style="font-size:12px;padding:5px 12px;">View Full Quote</a>
+            </div>
+            <table class="cost-table">
+              <thead>
+                <tr>
+                  <th>Cost Item</th>
+                  <th>Per Unit (USD)</th>
+                  <th>Total (USD)</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Fabric</td>
+                  <td>$2.6400</td>
+                  <td>$132,000.00</td>
+                  <td class="cost-notes">100% Cotton Pique 220GSM, 1.65m/unit @ $1.60/m</td>
+                </tr>
+                <tr>
+                  <td>CMT</td>
+                  <td>$1.4500</td>
+                  <td>$72,500.00</td>
+                  <td class="cost-notes">Polo shirt, medium complexity, SAM 18 min</td>
+                </tr>
+                <tr>
+                  <td>Trims</td>
+                  <td>$0.3200</td>
+                  <td>$16,000.00</td>
+                  <td class="cost-notes">Buttons, labels, hangtags, threads</td>
+                </tr>
+                <tr>
+                  <td>Washing</td>
+                  <td>$0.2000</td>
+                  <td>$10,000.00</td>
+                  <td class="cost-notes">Normal wash</td>
+                </tr>
+                <tr>
+                  <td>Embellishment</td>
+                  <td>$0.1800</td>
+                  <td>$9,000.00</td>
+                  <td class="cost-notes">Embroidery 8K stitches @ $0.02/1K + woven label</td>
+                </tr>
+                <tr>
+                  <td>Packing</td>
+                  <td>$0.1500</td>
+                  <td>$7,500.00</td>
+                  <td class="cost-notes">Polybag, inner box, master carton</td>
+                </tr>
+                <tr>
+                  <td>Overhead</td>
+                  <td>$0.1450</td>
+                  <td>$7,250.00</td>
+                  <td class="cost-notes">10% of CMT</td>
+                </tr>
+                <tr>
+                  <td>Testing</td>
+                  <td>$0.0400</td>
+                  <td>$2,000.00</td>
+                  <td class="cost-notes">4 tests @ $500 each</td>
+                </tr>
+                <tr>
+                  <td>Commission</td>
+                  <td>$0.2585</td>
+                  <td>$12,925.00</td>
+                  <td class="cost-notes">5% of subtotal</td>
+                </tr>
+                <tr>
+                  <td>Finance Cost</td>
+                  <td>$0.1034</td>
+                  <td>$5,170.00</td>
+                  <td class="cost-notes">2% of subtotal</td>
+                </tr>
+                <tr>
+                  <td>Freight</td>
+                  <td>$0.0000</td>
+                  <td>$0.00</td>
+                  <td class="cost-notes">FOB - not included</td>
+                </tr>
+                <tr class="cost-subtotal">
+                  <td><strong>Cost Price</strong></td>
+                  <td><strong>$5.4869</strong></td>
+                  <td><strong>$274,345.00</strong></td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>Margin (15%)</td>
+                  <td>$0.9683</td>
+                  <td>-</td>
+                  <td class="cost-notes">Target: 15%</td>
+                </tr>
+                <tr class="cost-total-row">
+                  <td>FOB Price</td>
+                  <td>$6.4552</td>
+                  <td>$322,760.00</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div style="margin-top:16px;display:flex;gap:8px;">
+            <button class="btn btn-primary">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4a2 2 0 00-2-2z"/><path d="M8 10h4"/></svg>
+              Open in Quote Builder
+            </button>
+            <button class="btn btn-secondary">
+              <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 15v2h2l8-8-2-2-8 8zM12.5 3.5l2 2"/></svg>
+              Adjust Margin
+            </button>
+          </div>
+        </div>
+
+        <!-- Tab 4: Communication -->
+        <div id="tab-communication" class="tab-content">
+          <div class="comm-timeline">
+            <div class="comm-item">
+              <div class="comm-icon received">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="12" height="9" rx="1"/><path d="M2 4l6 4 6-4"/></svg>
+              </div>
+              <div class="comm-body">
+                <div class="comm-header">
+                  <span class="comm-from">Anna Lindqvist (H&M)</span>
+                  <span class="comm-time">Mar 5, 2026, 09:14 AM</span>
+                </div>
+                <div class="comm-subject">RE: RFQ - AW26 Men's Polo Shirt - 50K units</div>
+                <div class="comm-preview">Hi Rahim, Please find attached the tech pack and size spec for our AW26 Men's Polo program. We need FOB pricing for 50,000 units, delivery to Hamburg by July 15. Please confirm you can meet OEKO-TEX and BSCI requirements...</div>
+              </div>
+            </div>
+
+            <div class="comm-item">
+              <div class="comm-icon sent">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2l-12 5 4 2 6-5-5 6 2 4z"/></svg>
+              </div>
+              <div class="comm-body">
+                <div class="comm-header">
+                  <span class="comm-from">Rahim Ahmed (You)</span>
+                  <span class="comm-time">Mar 5, 2026, 10:32 AM</span>
+                </div>
+                <div class="comm-subject">RE: RFQ - AW26 Men's Polo Shirt - 50K units</div>
+                <div class="comm-preview">Dear Anna, Thank you for the RFQ. We have received the tech pack and are currently reviewing it. We will revert with our pricing within 24 hours. We confirm that we hold current OEKO-TEX 100 and BSCI certifications...</div>
+              </div>
+            </div>
+
+            <div class="comm-item">
+              <div class="comm-icon received">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="12" height="9" rx="1"/><path d="M2 4l6 4 6-4"/></svg>
+              </div>
+              <div class="comm-body">
+                <div class="comm-header">
+                  <span class="comm-from">Anna Lindqvist (H&M)</span>
+                  <span class="comm-time">Mar 5, 2026, 11:05 AM</span>
+                </div>
+                <div class="comm-subject">RE: RFQ - AW26 Men's Polo Shirt - 50K units</div>
+                <div class="comm-preview">Thanks Rahim! One correction - the packaging should be individual polybag with size sticker, 12 per inner carton, 48 per master carton. Also confirming the yarn should be 26 Ne combed cotton. Looking forward to your quote.</div>
+              </div>
+            </div>
+
+            <div class="comm-item">
+              <div class="comm-icon note">
+                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a1 1 0 00-1 1v8a1 1 0 001 1h8a1 1 0 001-1V6"/><path d="M7 10l3-3"/></svg>
+              </div>
+              <div class="comm-body">
+                <div class="comm-header">
+                  <span class="comm-from" style="color:var(--yellow);">Negotiation Note</span>
+                  <span class="comm-time">Mar 6, 2026, 02:15 PM</span>
+                </div>
+                <div class="comm-preview">Anna mentioned in a separate call that H&M's target FOB is around $6.20-$6.50. They may accept up to $6.60 for the right quality. Previous season we quoted $6.35 for a similar style (HM-PS-2025-SS-3310) and won at $6.28.</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;">
+            <div style="font-size:13px;font-weight:600;color:var(--text-primary);margin-bottom:8px;">Add Negotiation Note</div>
+            <div class="note-input-wrapper">
+              <textarea class="note-input" rows="2" placeholder="Add a note about pricing discussion, counter-offers..."></textarea>
+              <button class="btn btn-primary" style="align-self:flex-end;padding:8px 14px;">Add</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ═══ Right Column ═══ -->
+      <div class="right-column">
+
+        <!-- RFQ Summary Card -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">RFQ Summary</div>
+          </div>
+          <div class="card-body" style="padding:0;">
+            <table style="width:100%;border-collapse:collapse;">
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:10px 16px;font-size:12px;color:var(--text-muted);font-weight:500;">Buyer</td>
+                <td style="padding:10px 16px;font-size:13px;color:var(--text-primary);font-weight:600;text-align:right;">H&M</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:10px 16px;font-size:12px;color:var(--text-muted);font-weight:500;">Product</td>
+                <td style="padding:10px 16px;font-size:13px;color:var(--text-primary);text-align:right;">Men's Polo Shirt</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:10px 16px;font-size:12px;color:var(--text-muted);font-weight:500;">Quantity</td>
+                <td style="padding:10px 16px;font-size:13px;color:var(--text-primary);font-weight:600;text-align:right;">50,000 pcs</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:10px 16px;font-size:12px;color:var(--text-muted);font-weight:500;">Estimated Value</td>
+                <td style="padding:10px 16px;font-size:13px;color:var(--aqua);font-weight:600;text-align:right;">$322,760</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:10px 16px;font-size:12px;color:var(--text-muted);font-weight:500;">Deadline</td>
+                <td style="padding:10px 16px;font-size:13px;text-align:right;">
+                  <span style="color:var(--amber);font-weight:600;">Mar 8, 2026</span>
+                  <span style="font-size:11px;color:var(--red);display:block;">in 1 day</span>
+                </td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--border);">
+                <td style="padding:10px 16px;font-size:12px;color:var(--text-muted);font-weight:500;">Assigned To</td>
+                <td style="padding:10px 16px;text-align:right;">
+                  <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;">
+                    <div class="note-avatar" style="background:var(--aqua);color:#0C1420;width:22px;height:22px;font-size:9px;">RA</div>
+                    <span style="font-size:13px;color:var(--text-primary);">Rahim Ahmed</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:10px 16px;font-size:12px;color:var(--text-muted);font-weight:500;">Source</td>
+                <td style="padding:10px 16px;font-size:13px;color:var(--text-secondary);text-align:right;">Email (Gmail)</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+
+        <!-- Status Timeline -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Status Timeline</div>
+          </div>
+          <div class="card-body">
+            <div class="status-timeline">
+              <div class="timeline-item">
+                <div class="timeline-dot completed">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l3 3 5-5"/></svg>
+                </div>
+                <div class="timeline-line"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">New</div>
+                  <div class="timeline-meta">Mar 5, 09:14 AM - System</div>
+                  <div class="timeline-duration">
+                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="5" r="4"/><path d="M5 3v2l1.5 1"/></svg>
+                    2 min
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot completed">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l3 3 5-5"/></svg>
+                </div>
+                <div class="timeline-line"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Extracting</div>
+                  <div class="timeline-meta">Mar 5, 09:16 AM - RFQX AI</div>
+                  <div class="timeline-duration">
+                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="5" r="4"/><path d="M5 3v2l1.5 1"/></svg>
+                    45 sec
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot completed">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l3 3 5-5"/></svg>
+                </div>
+                <div class="timeline-line"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Extracted</div>
+                  <div class="timeline-meta">Mar 5, 09:17 AM - RFQX AI</div>
+                  <div class="timeline-duration">
+                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="5" r="4"/><path d="M5 3v2l1.5 1"/></svg>
+                    4h 12min
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot completed">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l3 3 5-5"/></svg>
+                </div>
+                <div class="timeline-line"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title">Costing</div>
+                  <div class="timeline-meta">Mar 5, 01:29 PM - Rahim Ahmed</div>
+                  <div class="timeline-duration">
+                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="5" r="4"/><path d="M5 3v2l1.5 1"/></svg>
+                    28 sec
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot current">
+                  <svg width="12" height="12" fill="currentColor"><circle cx="6" cy="6" r="3"/></svg>
+                </div>
+                <div class="timeline-line"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title" style="color:var(--aqua);">Review</div>
+                  <div class="timeline-meta">Mar 5, 01:30 PM - Current</div>
+                  <div class="timeline-duration" style="background:var(--aqua-dim);color:var(--aqua);">
+                    <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="5" r="4"/><path d="M5 3v2l1.5 1"/></svg>
+                    1d 10h (ongoing)
+                  </div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot pending">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="4"/></svg>
+                </div>
+                <div class="timeline-line"></div>
+                <div class="timeline-content">
+                  <div class="timeline-title" style="color:var(--text-muted);">Sent</div>
+                  <div class="timeline-meta">Pending</div>
+                </div>
+              </div>
+
+              <div class="timeline-item">
+                <div class="timeline-dot pending">
+                  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="4"/></svg>
+                </div>
+                <div class="timeline-content">
+                  <div class="timeline-title" style="color:var(--text-muted);">Won / Lost</div>
+                  <div class="timeline-meta">Pending</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Internal Notes -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Internal Notes</div>
+          </div>
+          <div class="card-body">
+            <div class="notes-thread">
+              <div class="note-item">
+                <div class="note-header">
+                  <div class="note-avatar" style="background:var(--aqua);color:#0C1420;">RA</div>
+                  <span class="note-author">Rahim Ahmed</span>
+                  <span class="note-time">Mar 5, 01:45 PM</span>
+                </div>
+                <div class="note-text">Fabric cost seems high. <span class="note-mention">@Sarah Khan</span> can we check with Hameem Textiles for a better rate on 220GSM pique? Last time they gave us $1.45/m for 40K+ meters.</div>
+              </div>
+
+              <div class="note-item">
+                <div class="note-header">
+                  <div class="note-avatar" style="background:var(--purple);color:#fff;">SK</div>
+                  <span class="note-author">Sarah Khan</span>
+                  <span class="note-time">Mar 6, 09:20 AM</span>
+                </div>
+                <div class="note-text">Checked with Hameem - they can do $1.52/m for this quantity. Also got a quote from Pacific Denim at $1.48/m but lead time is 5 days longer. Recommending Hameem.</div>
+              </div>
+
+              <div class="note-item">
+                <div class="note-header">
+                  <div class="note-avatar" style="background:var(--aqua);color:#0C1420;">RA</div>
+                  <span class="note-author">Rahim Ahmed</span>
+                  <span class="note-time">Mar 6, 11:30 AM</span>
+                </div>
+                <div class="note-text">Good. Let's go with Hameem at $1.52. Update the cost sheet and we can aim for FOB $6.30. That gives us ~13.5% margin which is acceptable for H&M volume.</div>
+              </div>
+            </div>
+
+            <div class="note-input-wrapper mt-4">
+              <textarea class="note-input" rows="2" placeholder="Add a note... Use @mention to tag team members"></textarea>
+              <button class="btn btn-primary" style="align-self:flex-end;padding:8px 14px;">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2l-12 5 4 2 6-5-5 6 2 4z"/></svg>
+                Post
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Activity Feed -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Activity</div>
+          </div>
+          <div class="card-body" style="padding:12px 16px;">
+            <div class="activity-list">
+              <div class="activity-item">
+                <div class="activity-avatar" style="background:var(--purple);color:#fff;">SK</div>
+                <div class="activity-text"><strong>Sarah Khan</strong> added a note about fabric pricing</div>
+                <span class="activity-time">2h ago</span>
+              </div>
+              <div class="activity-item">
+                <div class="activity-avatar" style="background:var(--aqua);color:#0C1420;">RA</div>
+                <div class="activity-text"><strong>Rahim Ahmed</strong> updated cost sheet - fabric rate changed to $1.52/m</div>
+                <span class="activity-time">4h ago</span>
+              </div>
+              <div class="activity-item">
+                <div class="activity-avatar" style="background:var(--aqua-dim);color:var(--aqua);font-size:9px;">AI</div>
+                <div class="activity-text"><strong>RFQX AI</strong> generated cost breakdown for <span class="entity-link">QT-202603-0038</span></div>
+                <span class="activity-time">1d ago</span>
+              </div>
+              <div class="activity-item">
+                <div class="activity-avatar" style="background:var(--aqua);color:#0C1420;">RA</div>
+                <div class="activity-text"><strong>Rahim Ahmed</strong> approved extracted specs (3 flagged fields reviewed)</div>
+                <span class="activity-time">1d ago</span>
+              </div>
+              <div class="activity-item">
+                <div class="activity-avatar" style="background:var(--aqua-dim);color:var(--aqua);font-size:9px;">AI</div>
+                <div class="activity-text"><strong>RFQX AI</strong> extracted specs from 3 attachments (avg. confidence 92%)</div>
+                <span class="activity-time">2d ago</span>
+              </div>
+              <div class="activity-item">
+                <div class="activity-avatar" style="background:var(--aqua-dim);color:var(--aqua);font-size:9px;">AI</div>
+                <div class="activity-text"><strong>RFQX AI</strong> detected RFQ from <strong>anna.lindqvist@hm.com</strong></div>
+                <span class="activity-time">2d ago</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- QUINN Toggle FAB -->
+<button class="quinn-toggle" title="Open QUINN AI Copilot">Q</button>
+
+<script>
+  // Tab switching
+  function switchTab(tabEl, contentId) {
+    // Deactivate all tabs
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    // Activate selected
+    tabEl.classList.add('active');
+    document.getElementById(contentId).classList.add('active');
+  }
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.dropdown-wrapper')) {
+      document.querySelectorAll('.dropdown-menu').forEach(d => d.classList.remove('show'));
+    }
+  });
+</script>
+
+</body>
+</html>

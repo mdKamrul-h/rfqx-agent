@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RFQX - Onboarding</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-darkest: #0C1420;
+      --bg-dark: #131E30;
+      --bg-medium: #1A2640;
+      --bg-card: #1E2D45;
+      --bg-input: #162236;
+      --border-color: #2A3A52;
+      --border-focus: #57ACAF;
+      --primary: #57ACAF;
+      --primary-hover: #6BC4C7;
+      --primary-muted: rgba(87, 172, 175, 0.15);
+      --accent-yellow: #EAB308;
+      --accent-yellow-muted: rgba(234, 179, 8, 0.15);
+      --text-primary: #F1F5F9;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+      --success: #10B981;
+      --success-muted: rgba(16, 185, 129, 0.15);
+      --error: #EF4444;
+      --error-muted: rgba(239, 68, 68, 0.15);
+      --warning: #F59E0B;
+      --purple: #8B5CF6;
+      --radius: 8px;
+      --radius-lg: 12px;
+      --transition: 150ms ease;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: linear-gradient(135deg, var(--bg-darkest) 0%, var(--bg-dark) 50%, var(--bg-medium) 100%);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    /* Logo */
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary) 0%, #3D8E91 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 18px;
+      color: #fff;
+    }
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+      letter-spacing: -0.5px;
+    }
+    .logo-text span { color: var(--primary); }
+    .logo-sub {
+      font-size: 11px;
+      color: var(--accent-yellow);
+      font-weight: 500;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-left: 2px;
+    }
+
+    /* Wizard Card */
+    .wizard-card {
+      width: 100%;
+      max-width: 740px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    /* Stepper */
+    .stepper {
+      display: flex;
+      align-items: center;
+      padding: 24px 32px;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(0, 0, 0, 0.15);
+    }
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .step-number {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      border: 2px solid var(--border-color);
+      color: var(--text-muted);
+      background: transparent;
+      transition: all var(--transition);
+      flex-shrink: 0;
+    }
+    .step.active .step-number {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #fff;
+    }
+    .step.completed .step-number {
+      border-color: var(--success);
+      background: var(--success);
+      color: #fff;
+    }
+    .step-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      transition: var(--transition);
+      white-space: nowrap;
+    }
+    .step.active .step-label { color: var(--text-primary); }
+    .step.completed .step-label { color: var(--success); }
+    .step-connector {
+      flex: 1;
+      height: 2px;
+      background: var(--border-color);
+      margin: 0 16px;
+      position: relative;
+    }
+    .step-connector.completed { background: var(--success); }
+
+    /* Step Content */
+    .step-content {
+      display: none;
+      padding: 32px;
+    }
+    .step-content.active { display: block; }
+    .step-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .step-description {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 28px;
+    }
+
+    /* Form Elements */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .form-group.full-width { grid-column: 1 / -1; }
+    .form-label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+    .form-label .required {
+      color: var(--error);
+      margin-left: 2px;
+    }
+    .form-input, .form-select, .form-textarea {
+      padding: 10px 14px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color var(--transition), box-shadow var(--transition);
+      outline: none;
+    }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(87, 172, 175, 0.15);
+    }
+    .form-input::placeholder { color: var(--text-muted); }
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2394A3B8' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 32px;
+      cursor: pointer;
+    }
+    .form-select option { background: var(--bg-card); color: var(--text-primary); }
+    .form-textarea { resize: vertical; min-height: 80px; }
+    .form-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* File Upload */
+    .file-upload {
+      border: 2px dashed var(--border-color);
+      border-radius: var(--radius);
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition);
+      background: rgba(0,0,0,0.1);
+    }
+    .file-upload:hover {
+      border-color: var(--primary);
+      background: var(--primary-muted);
+    }
+    .file-upload-icon {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      background: var(--primary-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .file-upload-icon svg { width: 20px; height: 20px; stroke: var(--primary); fill: none; }
+    .file-upload-text { font-size: 13px; color: var(--text-secondary); }
+    .file-upload-text strong { color: var(--primary); }
+    .file-upload-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 20px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all var(--transition);
+      text-decoration: none;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-primary:hover { background: var(--primary-hover); box-shadow: 0 4px 12px rgba(87, 172, 175, 0.3); }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+    }
+    .btn-secondary:hover { border-color: var(--text-secondary); color: var(--text-primary); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-muted);
+      padding: 10px 16px;
+    }
+    .btn-ghost:hover { color: var(--text-primary); background: rgba(255,255,255,0.05); }
+    .btn-icon { padding: 8px; border-radius: 6px; }
+
+    /* Footer Actions */
+    .wizard-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 32px;
+      border-top: 1px solid var(--border-color);
+      background: rgba(0,0,0,0.1);
+    }
+    .wizard-footer-right {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* === Step 2: Cost Library === */
+    .category-tabs {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .category-tab {
+      padding: 7px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: var(--transition);
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .category-tab:hover { color: var(--text-secondary); background: rgba(255,255,255,0.03); }
+    .category-tab.active {
+      color: var(--primary);
+      background: var(--primary-muted);
+      border-color: rgba(87, 172, 175, 0.3);
+    }
+
+    .setup-option-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .setup-option {
+      padding: 20px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all var(--transition);
+      text-align: center;
+    }
+    .setup-option:hover { border-color: var(--primary); background: var(--primary-muted); }
+    .setup-option.selected {
+      border-color: var(--primary);
+      background: var(--primary-muted);
+    }
+    .setup-option-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .setup-option-icon svg { width: 24px; height: 24px; fill: none; }
+    .setup-option-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .setup-option-desc { font-size: 12px; color: var(--text-muted); }
+
+    /* Cost Item Row */
+    .cost-items-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .cost-items-header h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+    .cost-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .cost-table th {
+      text-align: left;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(0,0,0,0.15);
+    }
+    .cost-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(42, 58, 82, 0.5);
+      color: var(--text-secondary);
+    }
+    .cost-table tr:hover td { background: rgba(255,255,255,0.02); }
+    .cost-table .cost-value {
+      font-weight: 600;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+    }
+    .cost-table .action-btns {
+      display: flex;
+      gap: 4px;
+    }
+    .cost-table .action-btns button {
+      padding: 4px 8px;
+      font-size: 11px;
+      background: transparent;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      transition: var(--transition);
+    }
+    .cost-table .action-btns button:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .badge-basic { background: var(--primary-muted); color: var(--primary); }
+    .badge-medium { background: var(--accent-yellow-muted); color: var(--accent-yellow); }
+    .badge-complex { background: rgba(239, 68, 68, 0.15); color: #EF4444; }
+
+    .add-item-row {
+      display: flex;
+      gap: 8px;
+      padding: 12px 0;
+      align-items: end;
+    }
+    .add-item-row .form-group { flex: 1; }
+    .add-item-row .form-input { padding: 8px 10px; font-size: 13px; }
+    .add-item-row .form-select { padding: 8px 10px; font-size: 13px; }
+
+    /* Items added indicator */
+    .items-count {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--success);
+      margin-top: 8px;
+    }
+    .items-count svg { width: 14px; height: 14px; stroke: var(--success); fill: none; }
+
+    /* === Step 3: Connect Inbox === */
+    .inbox-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .inbox-card {
+      display: flex;
+      align-items: center;
+      padding: 20px 24px;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      background: rgba(0,0,0,0.1);
+      transition: all var(--transition);
+    }
+    .inbox-card:hover { border-color: rgba(87, 172, 175, 0.3); background: rgba(87, 172, 175, 0.05); }
+    .inbox-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 16px;
+      flex-shrink: 0;
+    }
+    .inbox-card-icon.gmail { background: rgba(234, 67, 53, 0.15); }
+    .inbox-card-icon.outlook { background: rgba(0, 120, 212, 0.15); }
+    .inbox-card-icon.imap { background: rgba(139, 92, 246, 0.15); }
+    .inbox-card-icon svg { width: 24px; height: 24px; }
+    .inbox-card-info { flex: 1; }
+    .inbox-card-title { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+    .inbox-card-desc { font-size: 13px; color: var(--text-muted); }
+    .inbox-card .btn { flex-shrink: 0; }
+
+    .connected-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: var(--success-muted);
+      color: var(--success);
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .connected-badge svg { width: 14px; height: 14px; stroke: var(--success); fill: none; }
+
+    .skip-section {
+      text-align: center;
+      padding: 16px 0 0;
+      border-top: 1px solid var(--border-color);
+      margin-top: 20px;
+    }
+    .skip-section p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    /* Progress Text */
+    .progress-text {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .progress-text strong {
+      color: var(--primary);
+    }
+
+    /* Completed Check SVG */
+    .check-svg { width: 16px; height: 16px; }
+
+    /* Tooltip */
+    .tooltip-wrapper { position: relative; display: inline-flex; }
+    .tooltip-wrapper .tooltip {
+      display: none;
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--bg-darkest);
+      border: 1px solid var(--border-color);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      z-index: 10;
+    }
+    .tooltip-wrapper:hover .tooltip { display: block; }
+
+    /* Welcome Banner */
+    .welcome-banner {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: var(--accent-yellow-muted);
+      border: 1px solid rgba(234, 179, 8, 0.25);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+    }
+    .welcome-banner-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: rgba(234, 179, 8, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .welcome-banner-icon svg { width: 20px; height: 20px; }
+    .welcome-banner-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .welcome-banner-text strong { color: var(--accent-yellow); }
+
+    /* Connected email display */
+    .connected-email {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: var(--success-muted);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: var(--radius);
+      margin-top: 16px;
+    }
+    .connected-email-text {
+      font-size: 13px;
+      color: var(--success);
+      font-weight: 500;
+    }
+    .connected-email-addr {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Info card at bottom */
+    .info-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 16px;
+      background: rgba(87, 172, 175, 0.08);
+      border: 1px solid rgba(87, 172, 175, 0.15);
+      border-radius: var(--radius);
+      margin-top: 24px;
+    }
+    .info-card svg { flex-shrink: 0; width: 18px; height: 18px; stroke: var(--primary); fill: none; margin-top: 1px; }
+    .info-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body { padding: 16px; }
+      .wizard-card { max-width: 100%; }
+      .form-grid { grid-template-columns: 1fr; }
+      .stepper { padding: 16px 20px; gap: 0; }
+      .step-label { display: none; }
+      .step-content { padding: 24px 20px; }
+      .wizard-footer { padding: 16px 20px; }
+      .setup-option-cards { grid-template-columns: 1fr; }
+      .category-tabs { gap: 2px; }
+      .category-tab { padding: 6px 10px; font-size: 12px; }
+      .add-item-row { flex-wrap: wrap; }
+      .cost-table { font-size: 12px; }
+      .cost-table th, .cost-table td { padding: 8px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo -->
+  <div class="logo-container">
+    <div class="logo-icon">R</div>
+    <div>
+      <div class="logo-text">RFQ<span>X</span></div>
+      <div class="logo-sub">by fabricXai</div>
+    </div>
+  </div>
+
+  <!-- Wizard Card -->
+  <div class="wizard-card">
+
+    <!-- Stepper -->
+    <div class="stepper">
+      <div class="step completed" id="step-indicator-1" onclick="goToStep(1)">
+        <div class="step-number">
+          <svg class="check-svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 5"/></svg>
+        </div>
+        <span class="step-label">Factory Profile</span>
+      </div>
+      <div class="step-connector completed"></div>
+      <div class="step active" id="step-indicator-2" onclick="goToStep(2)">
+        <div class="step-number">2</div>
+        <span class="step-label">Cost Library</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" id="step-indicator-3" onclick="goToStep(3)">
+        <div class="step-number">3</div>
+        <span class="step-label">Connect Inbox</span>
+      </div>
+    </div>
+
+    <!-- ===== STEP 1: Factory Profile ===== -->
+    <div class="step-content" id="step-1">
+      <h2 class="step-title">Set up your factory profile</h2>
+      <p class="step-description">Tell us about your factory so we can customize RFQX for you.</p>
+
+      <div class="welcome-banner">
+        <div class="welcome-banner-icon">
+          <svg viewBox="0 0 20 20" fill="none">
+            <path d="M10 2L12.09 7.26L18 8.27L14 12.14L14.81 18.02L10 15.77L5.19 18.02L6 12.14L2 8.27L7.91 7.26L10 2Z" fill="#EAB308"/>
+          </svg>
+        </div>
+        <div class="welcome-banner-text">
+          <strong>Welcome to RFQX!</strong> Let's get your factory set up in 3 quick steps. This usually takes about 5 minutes. You can always change these settings later.
+        </div>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group full-width">
+          <label class="form-label">Factory Name <span class="required">*</span></label>
+          <input type="text" class="form-input" value="Falcon Garments Ltd." placeholder="Enter your factory name">
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">Factory Address</label>
+          <textarea class="form-textarea" rows="2" placeholder="Street address, city, country">Plot 15-17, BSCIC Industrial Area, Tongi, Gazipur, Dhaka, Bangladesh</textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" class="form-input" value="+880 2 9891234" placeholder="+880 XXXX XXXXXXX">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Website</label>
+          <input type="url" class="form-input" value="www.falcongarments.com.bd" placeholder="https://your-factory.com">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Base Currency <span class="required">*</span></label>
+          <select class="form-select">
+            <option value="USD" selected>USD - US Dollar</option>
+            <option value="BDT">BDT - Bangladeshi Taka</option>
+            <option value="EUR">EUR - Euro</option>
+            <option value="GBP">GBP - British Pound</option>
+            <option value="VND">VND - Vietnamese Dong</option>
+            <option value="INR">INR - Indian Rupee</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Default Incoterm <span class="required">*</span></label>
+          <select class="form-select">
+            <option value="FOB" selected>FOB - Free on Board</option>
+            <option value="CIF">CIF - Cost, Insurance & Freight</option>
+            <option value="EXW">EXW - Ex Works</option>
+            <option value="DDP">DDP - Delivered Duty Paid</option>
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">Factory Logo</label>
+          <div class="file-upload">
+            <div class="file-upload-icon">
+              <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                <polyline points="17 8 12 3 7 8"/>
+                <line x1="12" y1="3" x2="12" y2="15"/>
+              </svg>
+            </div>
+            <div class="file-upload-text"><strong>Click to upload</strong> or drag and drop</div>
+            <div class="file-upload-hint">PNG, JPG or SVG (max 2MB)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== STEP 2: Cost Library Setup ===== -->
+    <div class="step-content active" id="step-2">
+      <h2 class="step-title">Set up your cost library</h2>
+      <p class="step-description">Import your existing cost data or add items manually. This powers RFQX's automatic quoting engine.</p>
+
+      <!-- Setup Option Cards -->
+      <div class="setup-option-cards">
+        <div class="setup-option" onclick="selectSetup('excel')">
+          <div class="setup-option-icon" style="background: var(--success-muted);">
+            <svg viewBox="0 0 24 24" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+              <polyline points="10 9 9 9 8 9"/>
+            </svg>
+          </div>
+          <div class="setup-option-title">Import from Excel</div>
+          <div class="setup-option-desc">Upload your existing cost sheet. We'll map the columns.</div>
+        </div>
+        <div class="setup-option selected" onclick="selectSetup('manual')">
+          <div class="setup-option-icon" style="background: var(--primary-muted);">
+            <svg viewBox="0 0 24 24" stroke="#57ACAF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/>
+              <line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+          </div>
+          <div class="setup-option-title">Add Manually</div>
+          <div class="setup-option-desc">Enter cost items one by one. Great for getting started.</div>
+        </div>
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="category-tabs">
+        <button class="category-tab active" onclick="switchCategory(this, 'fabric')">Fabric</button>
+        <button class="category-tab" onclick="switchCategory(this, 'cmt')">CMT</button>
+        <button class="category-tab" onclick="switchCategory(this, 'trims')">Trims</button>
+        <button class="category-tab" onclick="switchCategory(this, 'washing')">Washing</button>
+        <button class="category-tab" onclick="switchCategory(this, 'packing')">Packing</button>
+        <button class="category-tab" onclick="switchCategory(this, 'overhead')">Overhead</button>
+        <button class="category-tab" onclick="switchCategory(this, 'freight')">Freight</button>
+      </div>
+
+      <!-- Fabric Category (Active) -->
+      <div id="category-fabric">
+        <div class="cost-items-header">
+          <h4>Fabric Items</h4>
+          <button class="btn btn-secondary" style="font-size: 13px; padding: 6px 14px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add Item
+          </button>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="cost-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Composition</th>
+                <th>GSM</th>
+                <th>Construction</th>
+                <th>Cost/Meter</th>
+                <th>Supplier</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="color: var(--text-primary); font-weight: 500;">Single Jersey Cotton</td>
+                <td>100% Cotton</td>
+                <td>160</td>
+                <td>Jersey</td>
+                <td class="cost-value">$3.85</td>
+                <td>Padma Textiles</td>
+                <td class="action-btns"><button>Edit</button><button>Delete</button></td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-primary); font-weight: 500;">Pique Cotton</td>
+                <td>100% Cotton</td>
+                <td>220</td>
+                <td>Pique</td>
+                <td class="cost-value">$4.50</td>
+                <td>Jamuna Knit</td>
+                <td class="action-btns"><button>Edit</button><button>Delete</button></td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-primary); font-weight: 500;">Poly-Cotton Poplin</td>
+                <td>65/35 PC</td>
+                <td>130</td>
+                <td>Poplin</td>
+                <td class="cost-value">$2.90</td>
+                <td>DBL Fabrics</td>
+                <td class="action-btns"><button>Edit</button><button>Delete</button></td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-primary); font-weight: 500;">French Terry</td>
+                <td>80/20 CVC</td>
+                <td>280</td>
+                <td>Terry</td>
+                <td class="cost-value">$5.20</td>
+                <td>Hamid Fabrics</td>
+                <td class="action-btns"><button>Edit</button><button>Delete</button></td>
+              </tr>
+              <tr>
+                <td style="color: var(--text-primary); font-weight: 500;">Twill Stretch</td>
+                <td>98/2 Cotton Spandex</td>
+                <td>260</td>
+                <td>Twill</td>
+                <td class="cost-value">$4.15</td>
+                <td>Noman Group</td>
+                <td class="action-btns"><button>Edit</button><button>Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="items-count">
+          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          5 fabric items added
+        </div>
+      </div>
+
+      <div class="info-card">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        <p>Don't worry about adding everything now. You can always add, edit, or import more cost items from the <strong style="color: var(--primary);">Cost Library</strong> page after setup. RFQX works best with at least fabric, CMT, and trims costs.</p>
+      </div>
+    </div>
+
+    <!-- ===== STEP 3: Connect Inbox ===== -->
+    <div class="step-content" id="step-3">
+      <h2 class="step-title">Connect your email inbox</h2>
+      <p class="step-description">RFQX monitors your inbox and automatically detects incoming RFQs from buyers. Connect at least one email to get started.</p>
+
+      <div class="inbox-cards">
+        <!-- Gmail -->
+        <div class="inbox-card">
+          <div class="inbox-card-icon gmail">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z" fill="none" stroke="#EA4335" stroke-width="1.5"/>
+              <polyline points="22,6 12,13 2,6" fill="none" stroke="#EA4335" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="inbox-card-info">
+            <div class="inbox-card-title">Google Gmail</div>
+            <div class="inbox-card-desc">Connect your Gmail or Google Workspace account</div>
+          </div>
+          <button class="btn btn-primary" style="font-size: 13px; padding: 8px 18px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Connect Gmail
+          </button>
+        </div>
+
+        <!-- Outlook -->
+        <div class="inbox-card">
+          <div class="inbox-card-icon outlook">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <rect x="2" y="4" width="20" height="16" rx="2" fill="none" stroke="#0078D4" stroke-width="1.5"/>
+              <polyline points="22,6 12,13 2,6" fill="none" stroke="#0078D4" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="inbox-card-info">
+            <div class="inbox-card-title">Microsoft Outlook</div>
+            <div class="inbox-card-desc">Connect your Outlook or Office 365 account</div>
+          </div>
+          <button class="btn btn-secondary" style="font-size: 13px; padding: 8px 18px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Connect Outlook
+          </button>
+        </div>
+
+        <!-- IMAP -->
+        <div class="inbox-card">
+          <div class="inbox-card-icon imap">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <rect x="2" y="3" width="20" height="14" rx="2" fill="none" stroke="#8B5CF6" stroke-width="1.5"/>
+              <line x1="8" y1="21" x2="16" y2="21" stroke="#8B5CF6" stroke-width="1.5" stroke-linecap="round"/>
+              <line x1="12" y1="17" x2="12" y2="21" stroke="#8B5CF6" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="inbox-card-info">
+            <div class="inbox-card-title">IMAP / Other Email</div>
+            <div class="inbox-card-desc">Connect any email using IMAP settings</div>
+          </div>
+          <button class="btn btn-secondary" style="font-size: 13px; padding: 8px 18px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            Configure
+          </button>
+        </div>
+      </div>
+
+      <!-- Simulated connected state -->
+      <div class="connected-email">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        <div>
+          <div class="connected-email-text">Gmail connected successfully</div>
+          <div class="connected-email-addr">merchandising@falcongarments.com.bd</div>
+        </div>
+      </div>
+
+      <div class="skip-section">
+        <p>Not ready to connect your inbox yet?</p>
+        <button class="btn btn-ghost">Skip for now - I'll connect later</button>
+      </div>
+
+      <div class="info-card">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0110 0v4"/>
+        </svg>
+        <p>Your email credentials are encrypted with AES-256 and stored securely. RFQX only reads emails that match RFQ patterns - personal emails are never accessed or stored.</p>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="wizard-footer">
+      <span class="progress-text">Step <strong>2</strong> of <strong>3</strong></span>
+      <div class="wizard-footer-right">
+        <button class="btn btn-secondary" onclick="goToStep(1)">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          Back
+        </button>
+        <button class="btn btn-primary" onclick="goToStep(3)">
+          Continue
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function goToStep(step) {
+      // Hide all step contents
+      document.querySelectorAll('.step-content').forEach(el => el.classList.remove('active'));
+      document.getElementById('step-' + step).classList.add('active');
+
+      // Update stepper indicators
+      for (let i = 1; i <= 3; i++) {
+        const indicator = document.getElementById('step-indicator-' + i);
+        indicator.classList.remove('active', 'completed');
+        if (i < step) {
+          indicator.classList.add('completed');
+          indicator.querySelector('.step-number').innerHTML = '<svg class="check-svg" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 5"/></svg>';
+        } else if (i === step) {
+          indicator.classList.add('active');
+          indicator.querySelector('.step-number').textContent = i;
+        } else {
+          indicator.querySelector('.step-number').textContent = i;
+        }
+      }
+
+      // Update connectors
+      const connectors = document.querySelectorAll('.step-connector');
+      connectors.forEach((c, idx) => {
+        if (idx < step - 1) {
+          c.classList.add('completed');
+        } else {
+          c.classList.remove('completed');
+        }
+      });
+
+      // Update footer
+      document.querySelector('.progress-text').innerHTML = 'Step <strong>' + step + '</strong> of <strong>3</strong>';
+
+      // Update footer buttons
+      const footerRight = document.querySelector('.wizard-footer-right');
+      if (step === 1) {
+        footerRight.innerHTML = `
+          <button class="btn btn-primary" onclick="goToStep(2)">
+            Continue
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>`;
+      } else if (step === 2) {
+        footerRight.innerHTML = `
+          <button class="btn btn-secondary" onclick="goToStep(1)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Back
+          </button>
+          <button class="btn btn-primary" onclick="goToStep(3)">
+            Continue
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>`;
+      } else {
+        footerRight.innerHTML = `
+          <button class="btn btn-secondary" onclick="goToStep(2)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+            Back
+          </button>
+          <button class="btn btn-primary" onclick="finishOnboarding()" style="background: var(--success);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            Complete Setup
+          </button>`;
+      }
+    }
+
+    function selectSetup(type) {
+      document.querySelectorAll('.setup-option').forEach(el => el.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+    }
+
+    function switchCategory(tab, category) {
+      document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    }
+
+    function finishOnboarding() {
+      alert('Onboarding complete! Redirecting to Dashboard...');
+    }
+  </script>
+</body>
+</html>
